@@ -6,7 +6,8 @@ CXXFLAGS = -Wall -Wextra -Werror -g -std=c++98
 SRCS = srcs/main.cpp \
 		srcs/server/Server.cpp
 
-HEADERS = headers/Server.hpp
+HEADERS = headers/Server.hpp \
+		headers/utils_00.hpp
 
 OBJS = $(SRCS:.cpp=.o)
 

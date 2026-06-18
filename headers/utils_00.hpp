@@ -6,7 +6,7 @@
 /*   By: ml-hote <ml-hote@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/16 13:40:38 by ml-hote           #+#    #+#             */
-/*   Updated: 2026/06/16 15:21:31 by ml-hote          ###   ########.fr       */
+/*   Updated: 2026/06/19 00:39:51 by ml-hote          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,5 +21,12 @@
 #include <iostream>
 #include <cctype>
 #include <cstring>
-
+#include <cstdlib>
+#include <sys/socket.h>
+#include <memory>
+#include <cstdio>
+#include <sys/types.h>
+#include <arpa/inet.h>
+#include <netinet/in.h>
+#include <unistd.h>
 #endif
