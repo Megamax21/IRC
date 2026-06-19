@@ -4,7 +4,10 @@ CXX = c++
 CXXFLAGS = -Wall -Wextra -Werror -g -std=c++98
 
 SRCS = srcs/main.cpp \
-		srcs/server/Server.cpp
+		srcs/server/Server.cpp \
+		srcs/server/ServerGetters.cpp \
+		srcs/server/ServerLauncher.cpp \
+		srcs/utils_00.cpp
 
 HEADERS = headers/Server.hpp \
 		headers/utils_00.hpp

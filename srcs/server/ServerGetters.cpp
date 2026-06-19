@@ -1,24 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.cpp                                           :+:      :+:    :+:   */
+/*   ServerGetters.cpp                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ml-hote <ml-hote@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/06/16 13:40:45 by ml-hote           #+#    #+#             */
-/*   Updated: 2026/06/19 04:32:08 by ml-hote          ###   ########.fr       */
+/*   Created: 2026/06/19 03:29:40 by ml-hote           #+#    #+#             */
+/*   Updated: 2026/06/19 03:30:48 by ml-hote          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../headers/Server.hpp"
+#include "../../headers/Server.hpp"
 
-int main(int ac, char **av)
+std::string	Server::get_password()
 {
-	std::cout << "Before parsing" << std::endl;
-	if (!args_parsing(ac, av))
-		return (-1);
-	std::cout << "Parsing is finished" << std::endl;
-	Server *irc_server = new Server(atoi(av[1]), av[1]);
-	irc_server->server_launching();
-	return (0);
+	return (this->_password);
+}
+
+int	Server::get_port()
+{
+	return (this->_port);
+}
+
+int	Server::get_socket()
+{
+	return (this->_socket);
 }
