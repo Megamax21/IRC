@@ -6,7 +6,7 @@
 /*   By: ml-hote <ml-hote@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/16 13:40:44 by ml-hote           #+#    #+#             */
-/*   Updated: 2026/06/19 01:10:11 by ml-hote          ###   ########.fr       */
+/*   Updated: 2026/06/19 02:20:53 by ml-hote          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -147,16 +147,26 @@ int Server::accept_client()
 */
 void Server::handle_client(int clientSocket)
 {
-	char buffer[1024] = {0};
-	int bytesRead = recv(clientSocket, buffer, sizeof(buffer), 0);
-	if (bytesRead > 0)
+	char buffer[1024];
+
+	while (true)
 	{
+		memset(buffer, 0, sizeof(buffer));
+		int bytesRead = recv(clientSocket, buffer, sizeof(buffer), 0);
+
+		if (bytesRead <= 0)
+		{
+			// 0 = client closed connection cleanly, <0 = error
+			std::cout << "Client disconnected" << std::endl;
+			break;
+		}
+
 		std::cout << "Received: " << buffer << std::endl;
 		send(clientSocket, buffer, bytesRead, 0);
 	}
+
 	close(clientSocket);
 }
-
 /*	server_launching()
 
 	Runs the setup steps in order — create_socket(), bind_socket(),
