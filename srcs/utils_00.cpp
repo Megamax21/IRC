@@ -6,7 +6,7 @@
 /*   By: ml-hote <ml-hote@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/19 03:53:12 by ml-hote           #+#    #+#             */
-/*   Updated: 2026/06/19 04:33:06 by ml-hote          ###   ########.fr       */
+/*   Updated: 2026/06/25 02:56:31 by ml-hote          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ bool	is_good_irc_port(char *s_port)
 		i++;
 	}
 	int i_port = atoi(s_port);
-	if (i_port > 6669 || i_port < 6665)
+	if ((i_port > 6669 || i_port < 6665) && i_port != 6697)
 	{
 		std::cout << "Port should be in range [6665 - 6669]" << std::endl;
 		return (false);

@@ -6,7 +6,7 @@
 /*   By: ml-hote <ml-hote@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/19 03:23:23 by ml-hote           #+#    #+#             */
-/*   Updated: 2026/06/19 04:35:54 by ml-hote          ###   ########.fr       */
+/*   Updated: 2026/06/25 23:38:46 by ml-hote          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -136,27 +136,26 @@ int Server::accept_client()
 	handle_client() reads one message from a connected client, echoes
 	it back, then closes that client's connection.
 */
-void Server::handle_client(int clientSocket)
+bool Server::handle_client(int clientSocket)
 {
 	char buffer[1024];
 
-	while (true)
+	memset(buffer, 0, sizeof(buffer));
+	int bytesRead = recv(clientSocket, buffer, sizeof(buffer), 0);
+
+	if (bytesRead <= 0)
 	{
-		memset(buffer, 0, sizeof(buffer));
-		int bytesRead = recv(clientSocket, buffer, sizeof(buffer), 0);
-
-		if (bytesRead <= 0)
-		{
-			// 0 = client closed connection cleanly, <0 = error
-			std::cout << "Client disconnected" << std::endl;
-			break;
-		}
-
-		std::cout << "Received: " << buffer << std::endl;
-		send(clientSocket, buffer, bytesRead, 0);
+		// 0 = client closed connection cleanly, <0 = error
+		std::cout << "Client " << clientSocket << " disconnected" << std::endl;
+		close(clientSocket);
+		return (false);
 	}
 
-	close(clientSocket);
+	std::cout << "Received from " << clientSocket << " : ";
+	std::cout.write(buffer, bytesRead);
+	std::cout << std::endl;
+	send(clientSocket, buffer, bytesRead, 0);
+	return (true);
 }
 
 /*	server_launching()
@@ -176,19 +175,63 @@ void Server::handle_client(int clientSocket)
 */
 void Server::server_launching()
 {
+	std::vector<struct pollfd> clients;
+	struct pollfd serverPoll;
+
 	if (!create_socket())
 		return;
 	if (!bind_socket())
 		return;
 	if (!start_listening())
 		return;
+	serverPoll.fd = this->_socket;
+	serverPoll.events = POLLIN;
+	serverPoll.revents = 0;
+	clients.push_back(serverPoll);
 
 	while (true)
 	{
-		int clientSocket = accept_client();
-		if (clientSocket < 0)
+		int ready = poll(&clients[0], clients.size(), -1);
+		if (ready < 0)
+		{
+			std::cerr << "Error: poll() failed" << std::endl;
 			continue;
-		handle_client(clientSocket);
+		}
+		for (std::vector<struct pollfd>::size_type i = 0; i < clients.size();)
+		{
+			if (clients[i].revents & (POLLERR | POLLHUP | POLLNVAL)) // Client disconnection
+			{
+				if (clients[i].fd != this->_socket)
+					close(clients[i].fd);
+				clients.erase(clients.begin() + i);
+				continue;
+			}
+			if (!(clients[i].revents & POLLIN)) // Waiting for datas
+			{
+				++i;
+				continue;
+			}
+			if (clients[i].fd == this->_socket)
+			{
+				int clientSocket = accept_client();
+				if (clientSocket >= 0)
+				{
+					struct pollfd clientPoll;
+					clientPoll.fd = clientSocket;
+					clientPoll.events = POLLIN;
+					clientPoll.revents = 0;
+					clients.push_back(clientPoll);
+				}
+				++i;
+				continue;
+			}
+			if (!handle_client(clients[i].fd))
+			{
+				clients.erase(clients.begin() + i);
+				continue;
+			}
+			++i;
+		}
 	}
 
 	close(this->_socket);

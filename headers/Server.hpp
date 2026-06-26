@@ -6,7 +6,7 @@
 /*   By: ml-hote <ml-hote@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/16 13:40:38 by ml-hote           #+#    #+#             */
-/*   Updated: 2026/06/19 04:36:13 by ml-hote          ###   ########.fr       */
+/*   Updated: 2026/06/25 23:37:48 by ml-hote          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@ private:
 	int			_socket;
 	int			_port;
 	struct		sockaddr_in _address;
+	std::vector<int>	_quitClients;
 public:
 	Server();
 	Server(int port, std::string password);
@@ -38,7 +39,10 @@ public:
 	bool	bind_socket();
 	bool	start_listening();
 	int		accept_client();
-	void	handle_client(int clientSocket);
+	bool	handle_client(int clientSocket);
+	bool	is_quit_client(int clientSocket);
+	void	mark_quit_client(int clientSocket);
+	void	unmark_quit_client(int clientSocket);
 	
 	
 };
