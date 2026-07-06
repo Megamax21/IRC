@@ -21,5 +21,15 @@
 #include <iostream>
 #include <cctype>
 #include <cstring>
+#include <cstdlib>
+#include <sys/socket.h>
+#include <memory>
+#include <cstdio>
+#include <sys/types.h>
+#include <arpa/inet.h>
+#include <netinet/in.h>
+#include <unistd.h>
+
+bool	args_parsing(int ac, char **av);
 
 #endif

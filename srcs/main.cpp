@@ -10,15 +10,15 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <iostream>
-#include <string>
-#include <memory>
-#include <cstring>
-#include <cstdio>
-#include <cstdlib>
+#include "../headers/Server.hpp"
 
 int main(int ac, char **av)
 {
-	
-	return 0;
+	std::cout << "Before parsing" << std::endl;
+	if (!args_parsing(ac, av))
+		return (-1);
+	std::cout << "Parsing is finished" << std::endl;
+	Server *irc_server = new Server(atoi(av[1]), av[2]);
+	irc_server->server_launching();
+	return (0);
 }

@@ -10,13 +10,20 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+
 #include "../../headers/Server.hpp"
 
-Server::Server() : server_ip(0)
+Server::Server() : _password("1234"), _socket(0), _port(0)
 {
+	std::cout << "Server constructor called" << std::endl;
+}
+
+Server::Server(int port, std::string password) : _password(password), _socket(0), _port(port)
+{
+	std::cout << "Server constructor called with args" << std::endl;
 }
 
 Server::~Server()
 {
+	std::cout << "Server destructor called" << std::endl;
 }
-
