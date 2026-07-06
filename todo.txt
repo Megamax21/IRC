@@ -1,3 +1,5 @@
+• [ ] Connecter CLIENT ET SERVER -> faire que plusieurs clients se connectent avec NICK, PASS et USER   
+
 • [x] Classe CHANNEL
 (pas encore de récupération des données via le Client)
 
