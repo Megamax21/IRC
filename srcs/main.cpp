@@ -6,7 +6,7 @@
 /*   By: ml-hote <ml-hote@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/16 13:40:45 by ml-hote           #+#    #+#             */
-/*   Updated: 2026/06/16 18:05:06 by ml-hote          ###   ########.fr       */
+/*   Updated: 2026/07/06 16:49:57 by ml-hote          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ int main(int ac, char **av)
 	if (!args_parsing(ac, av))
 		return (-1);
 	std::cout << "Parsing is finished" << std::endl;
-	Server *irc_server = new Server(atoi(av[1]), av[2]);
+	Server *irc_server = new Server(atoi(av[1]), av[1]);
 	irc_server->server_launching();
 	return (0);
 }
