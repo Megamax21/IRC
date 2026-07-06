@@ -1,0 +1,32 @@
+IRC NOTES:
+
+Server : reçoit la ligne brute, identifie la commande, vérifie que le client est enregistré.
+Commands : découpe les arguments et applique les règles IRC.
+Channel : modifie son propre état et expose des méthodes simples.
+Client : représente l’utilisateur connecté.
+
+
+CHANNEL:
+
+Un channel contient :
+- un nom (ex: #general)
+- une liste de membres
+- une liste d'opérateurs
+- +k, +i, +t
+
+
+COMMANDES IRC:
+
+join:
+Quand un client envoie JOIN #salon, le serveur doit :
+- vérifier que le format du channel est valide
+- créer le channel s’il n’existe pas
+- vérifier les restrictions du channel
+- ajouter le client au channel
+- si c’est le premier membre, le rendre opérateur
+- envoyer les réponses IRC attendues, notamment le topic et la liste des membres
+
+Si le channel n’existe pas, le premier utilisateur qui rejoint le crée et devient opérateur.
+Si le channel est +i, il faut une invitation.
+Si le channel est +k, il faut la bonne clé.
+Si +l est actif, il faut vérifier la limite de membres.
