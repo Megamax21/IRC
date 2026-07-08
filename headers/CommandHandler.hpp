@@ -64,4 +64,6 @@ private:
         const std::string& trailing);
 
     static bool isValidNickname(const std::string& nickname);
+
+    static void handleJoin(Server &server, Client &client, const IRCMessage &message);
 };

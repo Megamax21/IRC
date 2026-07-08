@@ -4,7 +4,8 @@ Server : reçoit la ligne brute, identifie la commande, vérifie que le client e
 Commands : découpe les arguments et applique les règles IRC.
 Channel : modifie son propre état et expose des méthodes simples.
 Client : représente l’utilisateur connecté.
-
+Broadcast : diffusion à plusieurs machines en même temps
+(ex: on envoie un message à plusieurs membres en même temps)
 
 CHANNEL:
 
@@ -14,6 +15,9 @@ Un channel contient :
 - une liste d'opérateurs
 - +k, +i, +t
 
+Pour contenir les Channels dans le Server, on utilise
+une MAP qui permet la recherche par clé, efficace dans
+notre cas car chaque channel possède 1 name
 
 COMMANDES IRC:
 

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ml-hote <ml-hote@student.42.fr>            +#+  +:+       +#+        */
+/*   By: sbehar <sbehar@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/16 13:40:38 by ml-hote           #+#    #+#             */
-/*   Updated: 2026/07/06 16:47:43 by ml-hote          ###   ########.fr       */
+/*   Updated: 2026/07/08 20:56:38 by sbehar           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 #define SERVER_HPP
 
 #include "utils_00.hpp"
+#include "Channel.hpp"
 #include <map>
 
 class Client;
@@ -21,11 +22,12 @@ class Client;
 class Server
 {
 private:
-	std::string	_password;
-	int			_socket;
-	int			_port;
-	struct		sockaddr_in _address;
-	std::vector<int>	_quitClients;
+	std::string						_password;
+	int								_socket;
+	int								_port;
+	struct		sockaddr_in 		_address;
+	std::vector<int>				_quitClients;
+	std::map<std::string, Channel>	_channels;
 public:
 	Server();
 	Server(int port, std::string password);
@@ -47,7 +49,8 @@ public:
 	void	mark_quit_client(int clientSocket);
 	void	unmark_quit_client(int clientSocket);
 	
-	
+	Channel	*getChannel(const std::string &name);
+	Channel	*createChannel(const std::string &name);
 };
 
 #endif
