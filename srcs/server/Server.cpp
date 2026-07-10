@@ -12,6 +12,9 @@
 
 
 #include "../../headers/Server.hpp"
+#include "../../headers/Client.hpp"
+#include "../../headers/Parser.hpp"
+#include "../../headers/CommandHandler.hpp"
 
 Server::Server() : _password("1234"), _socket(0), _port(0)
 {

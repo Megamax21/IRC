@@ -12,32 +12,6 @@ Client::Client(int fd)
 {
 }
 
-Client::Client(const Client& other)
-    : _fd(other._fd),
-      _nickname(other._nickname),
-      _username(other._username),
-      _realname(other._realname),
-      _passAccepted(other._passAccepted),
-      _registered(other._registered),
-      _buffer(other._buffer)
-{
-}
-
-Client& Client::operator=(const Client& other)
-{
-    if (this != &other)
-    {
-        _fd = other._fd;
-        _nickname = other._nickname;
-        _username = other._username;
-        _realname = other._realname;
-        _passAccepted = other._passAccepted;
-        _registered = other._registered;
-        _buffer = other._buffer;
-    }
-    return *this;
-}
-
 Client::~Client()
 {
 }

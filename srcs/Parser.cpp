@@ -1,26 +1,26 @@
 #include "../headers/Parser.hpp"
+#include "../headers/Client.hpp"
 #include <sstream>
 
-/*bool Parser::hasCompleteCommand(Client& client)
+bool Parser::hasCompleteCommand(Client& client)
 {
-    return client.getBuffer().find("\n") != std::string::npos;
+    return client.get_input_buffer().find('\n') != std::string::npos;
 }
 
 std::string Parser::extractCommand(Client& client)
 {
-    std::string& buffer = client.getBuffer();
+    std::string& buffer = client.get_input_buffer();
+    size_t pos = buffer.find('\n');
 
-    size_t pos = buffer.find("\n");
-
-    std::string command = buffer.substr(0, pos);
+    std::string line = buffer.substr(0, pos);
 
     buffer.erase(0, pos + 1);
 
-    if (!command.empty() && command[command.size() - 1] == '\r')
-        command.erase(command.size() - 1);
+    if (!line.empty() && line[line.size() - 1] == '\r')
+        line.erase(line.size() - 1);
 
-    return command;
-}*/
+    return line;
+}
 
 IRCMessage Parser::parseLine(const std::string& line)
 {

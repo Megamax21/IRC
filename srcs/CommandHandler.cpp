@@ -89,9 +89,7 @@ const char* CommandHandler::getCommandName(e_command_type type)
 void CommandHandler::execute(Server& server, Client& client,
     const IRCMessage& message)
 {
-    e_command_type type;
-
-    type = getCommandType(message);
+    e_command_type type = getCommandType(message);
 
     if (type == CMD_EMPTY)
         return;
@@ -102,23 +100,16 @@ void CommandHandler::execute(Server& server, Client& client,
         handleNick(server, client, message);
     else if (type == CMD_USER)
         handleUser(server, client, message);
-    else if (type == CMD_JOIN
-        || type == CMD_PRIVMSG
-        || type == CMD_KICK
-        || type == CMD_INVITE
-        || type == CMD_TOPIC
-        || type == CMD_MODE)
+    else if (type == CMD_CAP)
+        handleCap(server, client, message);
+    else if (type == CMD_PING)
+        handlePing(server, client, message);
+    else if (type == CMD_UNKNOWN)
+        sendNumeric(server, client, "421", message.command, "Unknown command");
+    else
     {
         if (!client.is_registered())
-        {
-            sendNumeric(server, client, "451", "",
-                "You have not registered");
-        }
-    }
-    else if (type == CMD_UNKNOWN)
-    {
-        sendNumeric(server, client, "421", message.command,
-            "Unknown command");
+            sendNumeric(server, client, "451", "", "You have not registered");
     }
 }
 
@@ -128,14 +119,13 @@ void CommandHandler::sendNumeric(Server& server, const Client& client,
     const std::string& trailing)
 {
     std::string target;
-    std::string reply;
 
     if (client.get_nickname().empty())
         target = "*";
     else
         target = client.get_nickname();
 
-    reply = ":ircserv " + code + " " + target;
+    std::string reply = ":ircserv " + code + " " + target;
 
     if (!middle.empty())
         reply += " " + middle;
@@ -148,26 +138,27 @@ void CommandHandler::sendNumeric(Server& server, const Client& client,
 void CommandHandler::handlePass(Server& server, Client& client,
     const IRCMessage& message)
 {
+    std::cerr << "PASS received: [" << message.params[0]
+          << "] size=" << message.params[0].size() << std::endl;
+
+    std::cerr << "SERVER password: [" << server.get_password()
+            << "] size=" << server.get_password().size() << std::endl;
     if (client.is_registered())
     {
-        sendNumeric(server, client, "462", "",
-            "You may not reregister");
+        sendNumeric(server, client, "462", "", "You may not reregister");
         return;
     }
 
     if (message.params.empty())
     {
-        sendNumeric(server, client, "461", "PASS",
-            "Not enough parameters");
+        sendNumeric(server, client, "461", "PASS", "Not enough parameters");
         return;
     }
 
     if (message.params[0] != server.get_password())
     {
         client.set_password_accepted(false);
-
-        sendNumeric(server, client, "464", "",
-            "Password incorrect");
+        sendNumeric(server, client, "464", "", "Password incorrect");
         return;
     }
 
@@ -221,25 +212,21 @@ bool CommandHandler::isValidNickname(const std::string& nickname)
 void CommandHandler::handleNick(Server& server, Client& client,
     const IRCMessage& message)
 {
-    std::string nickname;
-
     if (message.params.empty() || message.params[0].empty())
     {
-        sendNumeric(server, client, "431", "",
-            "No nickname given");
+        sendNumeric(server, client, "431", "", "No nickname given");
         return;
     }
 
-    nickname = message.params[0];
+    std::string nickname = message.params[0];
 
     if (!isValidNickname(nickname))
     {
-        sendNumeric(server, client, "432", nickname,
-            "Erroneous nickname");
+        sendNumeric(server, client, "432", nickname, "Erroneous nickname");
         return;
     }
 
-    if (server.is_nick_taken(nickname, client.get_fd()))
+    if (server.is_nickname_taken(nickname, client.get_fd()))
     {
         sendNumeric(server, client, "433", nickname,
             "Nickname is already in use");
@@ -247,7 +234,6 @@ void CommandHandler::handleNick(Server& server, Client& client,
     }
 
     client.set_nickname(nickname);
-
     tryRegister(server, client);
 }
 
@@ -256,22 +242,13 @@ void CommandHandler::handleUser(Server& server, Client& client,
 {
     if (client.is_registered())
     {
-        sendNumeric(server, client, "462", "",
-            "You may not reregister");
+        sendNumeric(server, client, "462", "", "You may not reregister");
         return;
     }
 
     if (message.params.size() < 4)
     {
-        sendNumeric(server, client, "461", "USER",
-            "Not enough parameters");
-        return;
-    }
-
-    if (message.params[0].empty())
-    {
-        sendNumeric(server, client, "461", "USER",
-            "Not enough parameters");
+        sendNumeric(server, client, "461", "USER", "Not enough parameters");
         return;
     }
 
@@ -283,8 +260,6 @@ void CommandHandler::handleUser(Server& server, Client& client,
 
 void CommandHandler::tryRegister(Server& server, Client& client)
 {
-    std::string welcome;
-
     if (client.is_registered())
         return;
 
@@ -299,11 +274,52 @@ void CommandHandler::tryRegister(Server& server, Client& client)
 
     client.set_registered(true);
 
-    welcome = ":ircserv 001 " + client.get_nickname()
+    server.queue_message(client.get_fd(),
+        ":ircserv 001 " + client.get_nickname()
         + " :Welcome to the ft_irc network "
         + client.get_nickname()
         + "!" + client.get_username()
-        + "@localhost\r\n";
+        + "@localhost\r\n");
 
-    server.queue_message(client.get_fd(), welcome);
+    server.queue_message(client.get_fd(),
+        ":ircserv 422 " + client.get_nickname()
+        + " :MOTD File is missing\r\n");
+}
+
+void CommandHandler::handleCap(Server& server, Client& client,
+    const IRCMessage& message)
+{
+    if (message.params.empty())
+        return;
+
+    std::string sub = toUpper(message.params[0]);
+
+    if (sub == "LS")
+    {
+        server.queue_message(client.get_fd(),
+            ":ircserv CAP * LS :\r\n");
+    }
+    else if (sub == "REQ")
+    {
+        std::string capability = "";
+
+        if (message.params.size() > 1)
+            capability = message.params[1];
+
+        server.queue_message(client.get_fd(),
+            ":ircserv CAP * NAK :" + capability + "\r\n");
+    }
+}
+
+void CommandHandler::handlePing(Server& server, Client& client,
+    const IRCMessage& message)
+{
+    if (message.params.empty())
+    {
+        sendNumeric(server, client, "409", "", "No origin specified");
+        return;
+    }
+
+    server.queue_message(client.get_fd(),
+        ":ircserv PONG ircserv :" + message.params[0] + "\r\n");
 }

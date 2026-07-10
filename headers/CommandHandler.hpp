@@ -1,4 +1,5 @@
 #pragma once
+
 #include "Parser.hpp"
 #include <string>
 
@@ -42,6 +43,12 @@ private:
         const IRCMessage& message);
 
     static void handleUser(Server& server, Client& client,
+        const IRCMessage& message);
+
+    static void handleCap(Server& server, Client& client,
+        const IRCMessage& message);
+
+    static void handlePing(Server& server, Client& client,
         const IRCMessage& message);
 
     static void tryRegister(Server& server, Client& client);

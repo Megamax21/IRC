@@ -11,6 +11,9 @@
 /* ************************************************************************** */
 
 #include "../../headers/Server.hpp"
+#include "../../headers/Client.hpp"
+#include "../../headers/Parser.hpp"
+#include "../../headers/CommandHandler.hpp"
 
 /*	create_socket()
 
@@ -138,24 +141,34 @@ int Server::accept_client()
 */
 bool Server::handle_client(int clientSocket)
 {
-	char buffer[1024];
+    char buffer[512];
 
-	memset(buffer, 0, sizeof(buffer));
-	int bytesRead = recv(clientSocket, buffer, sizeof(buffer), 0);
+    memset(buffer, 0, sizeof(buffer));
 
-	if (bytesRead <= 0)
-	{
-		// 0 = client closed connection cleanly, <0 = error
-		std::cout << "Client " << clientSocket << " disconnected" << std::endl;
-		close(clientSocket);
-		return (false);
-	}
+    int bytesRead = recv(clientSocket, buffer, sizeof(buffer), 0);
 
-	std::cout << "Received from " << clientSocket << " : ";
-	std::cout.write(buffer, bytesRead);
-	std::cout << std::endl;
-	send(clientSocket, buffer, bytesRead, 0);
-	return (true);
+    if (bytesRead <= 0)
+    {
+        std::cout << "Client " << clientSocket << " disconnected" << std::endl;
+        return false;
+    }
+
+    Client* client = get_client(clientSocket);
+
+    if (client == NULL)
+        return false;
+
+    client->append_input(std::string(buffer, bytesRead));
+
+    while (Parser::hasCompleteCommand(*client))
+    {
+        std::string line = Parser::extractCommand(*client);
+        IRCMessage message = Parser::parseLine(line);
+
+        CommandHandler::execute(*this, *client, message);
+    }
+
+    return true;
 }
 
 /*	server_launching()
@@ -175,64 +188,208 @@ bool Server::handle_client(int clientSocket)
 */
 void Server::server_launching()
 {
-	std::vector<struct pollfd> clients;
-	struct pollfd serverPoll;
+    struct pollfd serverPoll;
 
-	if (!create_socket())
-		return;
-	if (!bind_socket())
-		return;
-	if (!start_listening())
-		return;
-	serverPoll.fd = this->_socket;
-	serverPoll.events = POLLIN;
-	serverPoll.revents = 0;
-	clients.push_back(serverPoll);
+    if (!create_socket())
+        return;
+    if (!bind_socket())
+        return;
+    if (!start_listening())
+        return;
 
-	while (true)
-	{
-		int ready = poll(&clients[0], clients.size(), -1);
-		if (ready < 0)
-		{
-			std::cerr << "Error: poll() failed" << std::endl;
-			continue;
-		}
-		for (std::vector<struct pollfd>::size_type i = 0; i < clients.size();)
-		{
-			if (clients[i].revents & (POLLERR | POLLHUP | POLLNVAL)) // Client disconnection
-			{
-				if (clients[i].fd != this->_socket)
-					close(clients[i].fd);
-				clients.erase(clients.begin() + i);
-				continue;
-			}
-			if (!(clients[i].revents & POLLIN)) // Waiting for datas
-			{
-				++i;
-				continue;
-			}
-			if (clients[i].fd == this->_socket)
-			{
-				int clientSocket = accept_client();
-				if (clientSocket >= 0)
-				{
-					struct pollfd clientPoll;
-					clientPoll.fd = clientSocket;
-					clientPoll.events = POLLIN;
-					clientPoll.revents = 0;
-					clients.push_back(clientPoll);
-				}
-				++i;
-				continue;
-			}
-			if (!handle_client(clients[i].fd))
-			{
-				clients.erase(clients.begin() + i);
-				continue;
-			}
-			++i;
-		}
-	}
+    this->_pollFds.clear();
 
-	close(this->_socket);
+    serverPoll.fd = this->_socket;
+    serverPoll.events = POLLIN;
+    serverPoll.revents = 0;
+    this->_pollFds.push_back(serverPoll);
+
+    while (true)
+    {
+        int ready = poll(&this->_pollFds[0], this->_pollFds.size(), -1);
+
+        if (ready < 0)
+        {
+            std::cerr << "Error: poll() failed" << std::endl;
+            continue;
+        }
+
+        for (std::vector<struct pollfd>::size_type i = 0; i < this->_pollFds.size();)
+        {
+            int fd = this->_pollFds[i].fd;
+            short revents = this->_pollFds[i].revents;
+
+            if (revents == 0)
+            {
+                ++i;
+                continue;
+            }
+
+            if (revents & (POLLERR | POLLHUP | POLLNVAL))
+            {
+                if (fd != this->_socket)
+                    remove_client(fd);
+
+                this->_pollFds.erase(this->_pollFds.begin() + i);
+                continue;
+            }
+
+            if (fd == this->_socket)
+            {
+                if (revents & POLLIN)
+                {
+                    int clientSocket = accept_client();
+
+                    if (clientSocket >= 0)
+                    {
+                        add_client(clientSocket);
+
+                        struct pollfd clientPoll;
+                        clientPoll.fd = clientSocket;
+                        clientPoll.events = POLLIN;
+                        clientPoll.revents = 0;
+
+                        this->_pollFds.push_back(clientPoll);
+                    }
+                }
+
+                ++i;
+                continue;
+            }
+
+            if (revents & POLLIN)
+            {
+                if (!handle_client(fd))
+                {
+                    remove_client(fd);
+                    this->_pollFds.erase(this->_pollFds.begin() + i);
+                    continue;
+                }
+            }
+
+            if (revents & POLLOUT)
+            {
+                if (!send_queued_messages(fd))
+                {
+                    remove_client(fd);
+                    this->_pollFds.erase(this->_pollFds.begin() + i);
+                    continue;
+                }
+            }
+
+            this->_pollFds[i].revents = 0;
+            ++i;
+        }
+    }
+
+    close(this->_socket);
+}
+
+void Server::add_client(int clientSocket)
+{
+    _clients[clientSocket] = new Client(clientSocket);
+}
+
+void Server::remove_client(int clientSocket)
+{
+    std::map<int, Client*>::iterator it;
+
+    it = _clients.find(clientSocket);
+    if (it != _clients.end())
+    {
+        delete it->second;
+        _clients.erase(it);
+    }
+
+    close(clientSocket);
+}
+
+Client* Server::get_client(int clientSocket)
+{
+    std::map<int, Client*>::iterator it;
+
+    it = _clients.find(clientSocket);
+    if (it == _clients.end())
+        return NULL;
+
+    return it->second;
+}
+
+bool Server::is_nickname_taken(const std::string& nickname,
+    int currentClientSocket) const
+{
+    std::map<int, Client*>::const_iterator it;
+
+    for (it = _clients.begin(); it != _clients.end(); ++it)
+    {
+        if (it->first != currentClientSocket
+            && it->second->get_nickname() == nickname)
+            return true;
+    }
+    return false;
+}
+
+void Server::disable_pollout(int clientSocket)
+{
+    for (size_t i = 0; i < _pollFds.size(); ++i)
+    {
+        if (_pollFds[i].fd == clientSocket)
+        {
+            _pollFds[i].events &= ~POLLOUT;
+            return;
+        }
+    }
+}
+
+void Server::enable_pollout(int clientSocket)
+{
+    for (size_t i = 0; i < _pollFds.size(); ++i)
+    {
+        if (_pollFds[i].fd == clientSocket)
+        {
+            _pollFds[i].events |= POLLOUT;
+            return;
+        }
+    }
+}
+
+void Server::queue_message(int clientSocket, const std::string& message)
+{
+    Client* client;
+
+    client = get_client(clientSocket);
+    if (client == NULL)
+        return;
+
+    client->append_output(message);
+    enable_pollout(clientSocket);
+}
+
+bool Server::send_queued_messages(int clientSocket)
+{
+    Client* client;
+
+    client = get_client(clientSocket);
+    if (client == NULL)
+        return false;
+
+    std::string& output = client->get_output_buffer();
+
+    if (output.empty())
+    {
+        disable_pollout(clientSocket);
+        return true;
+    }
+
+    ssize_t bytesSent = send(clientSocket, output.c_str(), output.size(), 0);
+
+    if (bytesSent <= 0)
+        return false;
+
+    output.erase(0, bytesSent);
+
+    if (output.empty())
+        disable_pollout(clientSocket);
+
+    return true;
 }
