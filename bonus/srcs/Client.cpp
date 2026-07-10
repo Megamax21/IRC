@@ -17,9 +17,10 @@ Client::Client(const Client& other)
       _nickname(other._nickname),
       _username(other._username),
       _realname(other._realname),
-      _passAccepted(other._passAccepted),
+    _passwordAccepted(other._passwordAccepted),
       _registered(other._registered),
-      _buffer(other._buffer)
+    _inputBuffer(other._inputBuffer),
+    _outputBuffer(other._outputBuffer)
 {
 }
 
@@ -31,9 +32,10 @@ Client& Client::operator=(const Client& other)
         _nickname = other._nickname;
         _username = other._username;
         _realname = other._realname;
-        _passAccepted = other._passAccepted;
+        _passwordAccepted = other._passwordAccepted;
         _registered = other._registered;
-        _buffer = other._buffer;
+        _inputBuffer = other._inputBuffer;
+        _outputBuffer = other._outputBuffer;
     }
     return *this;
 }

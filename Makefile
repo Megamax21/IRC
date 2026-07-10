@@ -1,30 +1,49 @@
 NAME = ircserv
+BONUS_NAME = ircserv_bonus
 
 CXX = c++
 CXXFLAGS = -Wall -Wextra -Werror -g -std=c++98
 
-SRCS = srcs/main.cpp \
-		srcs/server/Server.cpp srcs/utils_00.cpp srcs/server/ServerLauncher.cpp \
-		srcs/server/ServerGetters.cpp
+MANDATORY_SRCS = mandatory/srcs/main.cpp \
+		mandatory/srcs/server/Server.cpp \
+		mandatory/srcs/utils_00.cpp \
+		mandatory/srcs/server/ServerLauncher.cpp \
+		mandatory/srcs/server/ServerGetters.cpp
 
-HEADERS = headers/Server.hpp headers/utils_00.hpp
+BONUS_SRCS = bonus/srcs/main.cpp \
+		bonus/srcs/server/Server.cpp \
+		bonus/srcs/utils_00.cpp \
+		bonus/srcs/server/ServerLauncher.cpp \
+		bonus/srcs/server/ServerGetters.cpp \
+		bonus/srcs/CommandHandler.cpp \
+		bonus/srcs/Parser.cpp \
+		bonus/srcs/Client.cpp \
+		bonus/srcs/channel/Channel.cpp
 
-OBJS = $(SRCS:.cpp=.o)
+MANDATORY_OBJS = $(MANDATORY_SRCS:.cpp=.o)
+BONUS_OBJS = $(BONUS_SRCS:.cpp=.o)
+ALL_OBJS = $(MANDATORY_SRCS:.cpp=.o) $(BONUS_SRCS:.cpp=.o)
 
 all: $(NAME)
 
-$(NAME): $(OBJS)
+bonus: $(BONUS_NAME)
+
+$(NAME): $(MANDATORY_OBJS)
 	$(CXX) $(CXXFLAGS) -o $@ $^
 
-%.o: %.cpp $(HEADERS)
+$(BONUS_NAME): $(BONUS_OBJS)
+	$(CXX) $(CXXFLAGS) -o $@ $^
+
+%.o: %.cpp
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 
 clean:
-	rm -f $(OBJS)
+	rm -f $(ALL_OBJS)
 
 fclean: clean
 	rm -f $(NAME)
+	rm -f $(BONUS_NAME)
 
 re: fclean all
 
-.PHONY: all clean fclean re
+.PHONY: all clean fclean re bonus

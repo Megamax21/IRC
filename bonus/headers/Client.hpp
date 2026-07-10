@@ -19,6 +19,8 @@ private:
 
 public:
     Client(int fd);
+    Client(const Client& other);
+    Client& operator=(const Client& other);
     ~Client();
 
     int get_fd() const;

@@ -6,7 +6,7 @@
 /*   By: ml-hote <ml-hote@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/16 13:40:38 by ml-hote           #+#    #+#             */
-/*   Updated: 2026/07/06 16:47:43 by ml-hote          ###   ########.fr       */
+/*   Updated: 2026/07/10 11:00:56 by ml-hote          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,8 @@ public:
 	bool	start_listening();
 	int		accept_client();
 	bool	handle_client(int clientSocket);
+	void	queue_message(int clientSocket, const std::string& message);
+	bool	is_nick_taken(const std::string& nickname, int currentFd);
 	bool	is_quit_client(int clientSocket);
 	void	mark_quit_client(int clientSocket);
 	void	unmark_quit_client(int clientSocket);
