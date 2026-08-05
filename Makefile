@@ -18,8 +18,8 @@ BONUS_SRCS = bonus/srcs/main.cpp \
 		bonus/srcs/CommandHandler.cpp \
 		bonus/srcs/Parser.cpp \
 		bonus/srcs/Client.cpp \
-		bonus/srcs/channel/Channel.cpp
-
+		bonus/srcs/channel/Channel.cpp \
+		bonus/srcs/GambleBot.cpp
 MANDATORY_OBJS = $(MANDATORY_SRCS:.cpp=.o)
 BONUS_OBJS = $(BONUS_SRCS:.cpp=.o)
 ALL_OBJS = $(MANDATORY_SRCS:.cpp=.o) $(BONUS_SRCS:.cpp=.o)

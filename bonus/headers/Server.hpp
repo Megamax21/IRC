@@ -33,8 +33,8 @@ public:
 	
 	// Getters
 	std::string	get_password();
-	int			get_socket();
-	int			get_port();
+	int     get_socket();
+	int     get_port();
 
 	// Server creation methods :
 	void	server_launching();
