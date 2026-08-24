@@ -6,7 +6,7 @@
 /*   By: sbehar <sbehar@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/16 13:40:38 by ml-hote           #+#    #+#             */
-/*   Updated: 2026/08/24 20:40:27 by sbehar           ###   ########.fr       */
+/*   Updated: 2026/08/25 00:10:49 by sbehar           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,15 +24,16 @@ class Client;
 class Server
 {
 private:
-    std::string                 _password;
-    int                         _socket;
-    int                         _port;
-    struct sockaddr_in          _address;
+    std::string                     _password;
+    int                             _socket;
+    int                             _port;
+    struct sockaddr_in              _address;
 
-    std::vector<int>            _quitClients;
+    std::vector<int>                _quitClients;
 
-    std::map<int, Client*>      _clients;
-    std::vector<struct pollfd>  _pollFds;
+    std::map<int, Client*>          _clients;
+    std::map<std::string, Channel>  _channels;
+    std::vector<struct pollfd>      _pollFds;
 
 public:
     Server();
@@ -55,10 +56,18 @@ public:
     // Client storage
     void    add_client(int clientSocket);
     void    remove_client(int clientSocket);
+    void    sendToClient(Client *client, const std::string &message);
     Client* get_client(int clientSocket);
 
     bool    is_nickname_taken(const std::string& nickname,
                 int currentClientSocket) const;
+
+    // Channel storage
+    Channel* getChannel(const std::string& name);
+    Channel* createChannel(const std::string& name);
+    void     sendToChannel(Channel *channel, const std::string &message, Client *except);
+    void     removeClientFromAllChannels(Client *client);
+    void     broadcastToChannel(Channel *channel, const std::string &message);
 
     // Output queue
     void    queue_message(int clientSocket, const std::string& message);

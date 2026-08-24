@@ -6,7 +6,7 @@
 /*   By: sbehar <sbehar@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/16 13:40:44 by ml-hote           #+#    #+#             */
-/*   Updated: 2026/07/08 21:31:09 by sbehar           ###   ########.fr       */
+/*   Updated: 2026/08/25 00:29:10 by sbehar           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 #include "../../headers/Server.hpp"
 #include "../../headers/Client.hpp"
 #include "../../headers/Parser.hpp"
-#include "../../headers/CommandHandler.hpp"
+#include "../../headers/Commands.hpp"
 
 Server::Server() : _password("1234"), _socket(0), _port(0)
 {
@@ -56,4 +56,40 @@ Channel	*Server::createChannel(const std::string &name)
 	std::pair<std::map<std::string, Channel>::iterator, bool> res =
 		_channels.insert(std::make_pair(name, Channel(name)));
 	return (&res.first->second);
+}
+
+void	Server::removeClientFromAllChannels(Client *client)
+{
+	for (std::map<std::string, Channel>::iterator it = _channels.begin();
+		it != _channels.end();
+		++it)
+	{
+		Channel	&channel = it->second;
+
+		if (!channel.isMember(client))
+			continue;
+		
+		std::string	message = 
+			client->get_prefix() +
+			" PART " +
+			channel.getName() +
+			" : Leaving all channels\r\n";
+		broadcastToChannel(&channel, message);
+		channel.removeMember(client);
+	}
+}
+
+void	Server::broadcastToChannel(Channel *channel, const std::string &message)
+{
+	if (!channel)
+		return ;
+
+	const std::vector<Client*>	&members = channel->getMembers();
+
+	for (std::vector<Client*>::const_iterator it = members.begin();
+		it != members.end(); ++it)
+	{
+		if (*it)
+			queue_message((*it)->get_fd(), message);
+	}
 }

@@ -10,12 +10,12 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../headers/CommandHandler.hpp"
-#include "../headers/Server.hpp"
-#include "../headers/Client.hpp"
+#include "../../headers/Commands.hpp"
+#include "../../headers/Server.hpp"
+#include "../../headers/Client.hpp"
 #include <cctype>
 
-std::string CommandHandler::toUpper(const std::string& value)
+std::string toUpper(const std::string& value)
 {
     std::string result = value;
 
@@ -29,7 +29,7 @@ std::string CommandHandler::toUpper(const std::string& value)
     return result;
 }
 
-e_command_type CommandHandler::getCommandType(const IRCMessage& message)
+e_command_type  getCommandType(const IRCMessage& message)
 {
     std::string command;
 
@@ -66,7 +66,7 @@ e_command_type CommandHandler::getCommandType(const IRCMessage& message)
     return CMD_UNKNOWN;
 }
 
-const char* CommandHandler::getCommandName(e_command_type type)
+const char* getCommandName(e_command_type type)
 {
     if (type == CMD_EMPTY)
         return "EMPTY";
@@ -98,7 +98,7 @@ const char* CommandHandler::getCommandName(e_command_type type)
     return "UNKNOWN";
 }
 
-void CommandHandler::execute(Server& server, Client& client,
+void    execute(Server& server, Client& client,
     const IRCMessage& message)
 {
     e_command_type type = getCommandType(message);
@@ -116,6 +116,15 @@ void CommandHandler::execute(Server& server, Client& client,
         handleCap(server, client, message);
     else if (type == CMD_PING)
         handlePing(server, client, message);
+    else if (type == CMD_JOIN)
+    {
+        if (!client.is_registered())
+        {
+            sendNumeric(server, client, "451", "", "You have not registered");
+            return;
+        }
+        executeJoin(server, client, message);
+    }
     else if (type == CMD_UNKNOWN)
         sendNumeric(server, client, "421", message.command, "Unknown command");
     else
@@ -125,7 +134,7 @@ void CommandHandler::execute(Server& server, Client& client,
     }
 }
 
-void CommandHandler::sendNumeric(Server& server, const Client& client,
+void    sendNumeric(Server& server, const Client& client,
     const std::string& code,
     const std::string& middle,
     const std::string& trailing)
@@ -147,14 +156,9 @@ void CommandHandler::sendNumeric(Server& server, const Client& client,
     server.queue_message(client.get_fd(), reply);
 }
 
-void CommandHandler::handlePass(Server& server, Client& client,
+void    handlePass(Server& server, Client& client,
     const IRCMessage& message)
 {
-    std::cerr << "PASS received: [" << message.params[0]
-          << "] size=" << message.params[0].size() << std::endl;
-
-    std::cerr << "SERVER password: [" << server.get_password()
-            << "] size=" << server.get_password().size() << std::endl;
     if (client.is_registered())
     {
         sendNumeric(server, client, "462", "", "You may not reregister");
@@ -178,7 +182,7 @@ void CommandHandler::handlePass(Server& server, Client& client,
     tryRegister(server, client);
 }
 
-bool CommandHandler::isValidNickname(const std::string& nickname)
+bool    isValidNickname(const std::string& nickname)
 {
     size_t i;
 
@@ -221,7 +225,7 @@ bool CommandHandler::isValidNickname(const std::string& nickname)
     return true;
 }
 
-bool CommandHandler::isValidChannelName(const std::string &name) const
+bool    isValidChannelName(const std::string &name)
 {
     if (name.empty())
         return (false);
@@ -236,7 +240,7 @@ bool CommandHandler::isValidChannelName(const std::string &name) const
     return (true);
 }
 
-void CommandHandler::handleNick(Server& server, Client& client,
+void    handleNick(Server& server, Client& client,
     const IRCMessage& message)
 {
     if (message.params.empty() || message.params[0].empty())
@@ -264,7 +268,7 @@ void CommandHandler::handleNick(Server& server, Client& client,
     tryRegister(server, client);
 }
 
-void CommandHandler::handleUser(Server& server, Client& client,
+void    handleUser(Server& server, Client& client,
     const IRCMessage& message)
 {
     if (client.is_registered())
@@ -285,7 +289,7 @@ void CommandHandler::handleUser(Server& server, Client& client,
     tryRegister(server, client);
 }
 
-void CommandHandler::tryRegister(Server& server, Client& client)
+void    tryRegister(Server& server, Client& client)
 {
     if (client.is_registered())
         return;
@@ -313,7 +317,7 @@ void CommandHandler::tryRegister(Server& server, Client& client)
         + " :MOTD File is missing\r\n");
 }
 
-void CommandHandler::handleCap(Server& server, Client& client,
+void    handleCap(Server& server, Client& client,
     const IRCMessage& message)
 {
     if (message.params.empty())
@@ -338,7 +342,7 @@ void CommandHandler::handleCap(Server& server, Client& client,
     }
 }
 
-void CommandHandler::handlePing(Server& server, Client& client,
+void    handlePing(Server& server, Client& client,
     const IRCMessage& message)
 {
     if (message.params.empty())
@@ -351,7 +355,7 @@ void CommandHandler::handlePing(Server& server, Client& client,
         ":ircserv PONG ircserv :" + message.params[0] + "\r\n");
 }
 
-std::vector<std::string> CommandHandler::split(const std::string &value, char delimiter)
+std::vector<std::string>    split(const std::string &value, char delimiter)
 {
     std::vector<std::string>    result;
     std::string                 current;
@@ -368,4 +372,9 @@ std::vector<std::string> CommandHandler::split(const std::string &value, char de
     }
     result.push_back(current);
     return (result);
+}
+
+void    leaveAllChannels(Server &server, Client &client)
+{
+    server.removeClientFromAllChannels(&client);
 }

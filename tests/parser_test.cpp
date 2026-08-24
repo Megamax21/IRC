@@ -1,16 +1,16 @@
 #include "../headers/Parser.hpp"
-#include "../headers/CommandHandler.hpp"
+#include "../headers/Commands.hpp"
 #include <iostream>
 
 static void testDispatcher(const std::string& line)
 {
     IRCMessage message = Parser::parseLine(line);
-    e_command_type type = CommandHandler::getCommandType(message);
+    e_command_type type = getCommandType(message);
 
     std::cout << "Line: [" << line << "]" << std::endl;
     std::cout << "Command parsed: [" << message.command << "]" << std::endl;
     std::cout << "Dispatcher result: ["
-              << CommandHandler::getCommandName(type)
+              << getCommandName(type)
               << "]" << std::endl;
     std::cout << "------------------------" << std::endl;
 }

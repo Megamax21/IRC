@@ -5,18 +5,21 @@ CXXFLAGS = -Wall -Wextra -Werror -g -std=c++98
 
 SRCS = srcs/main.cpp \
 		srcs/utils_00.cpp \
+		srcs/Parser.cpp \
 		srcs/server/Server.cpp \
 		srcs/server/ServerLauncher.cpp \
 		srcs/server/ServerGetters.cpp \
-		srcs/Client.cpp \
-		srcs/Parser.cpp \
-		srcs/CommandHandler.cpp
+		srcs/client/Client.cpp \
+		srcs/channel/Channel.cpp \
+		srcs/commands/CommandHandler.cpp \
+		srcs/commands/Join.cpp
 
 HEADERS = headers/Server.hpp \
 		  headers/utils_00.hpp \
 		  headers/Client.hpp \
+		  headers/Channel.hpp \
 		  headers/Parser.hpp \
-		  headers/CommandHandler.hpp
+		  headers/Commands.hpp
 
 OBJS = $(SRCS:.cpp=.o)
 

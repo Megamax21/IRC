@@ -1,11 +1,10 @@
-• [ ] Connecter CLIENT ET SERVER -> faire que plusieurs clients se connectent avec NICK, PASS et USER   
+• [X] Connecter CLIENT ET SERVER -> faire que plusieurs clients se connectent avec NICK, PASS et USER   
 
 • [x] Classe CHANNEL
-(pas encore de récupération des données via le Client)
 
 COMMANDES IRC:
-(les commandes dépendent en partie du Client -> voir partie de Tom)
-• [ ] JOIN
+• [X] JOIN -> regarder pourquoi l'onglet du channel n'est pas supprimé lors du JOIN 0
+• Gérer l'affichage des messages de chaque utilisateur dans un channel pour autrui
 • [ ] PRIVMSG
 • [ ] KICK
 • [ ] INVITE

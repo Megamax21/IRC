@@ -6,14 +6,14 @@
 /*   By: sbehar <sbehar@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/19 03:23:23 by ml-hote           #+#    #+#             */
-/*   Updated: 2026/08/24 20:53:44 by sbehar           ###   ########.fr       */
+/*   Updated: 2026/08/25 00:10:57 by sbehar           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../headers/Server.hpp"
 #include "../../headers/Client.hpp"
 #include "../../headers/Parser.hpp"
-#include "../../headers/CommandHandler.hpp"
+#include "../../headers/Commands.hpp"
 
 /*	create_socket()
 
@@ -165,7 +165,7 @@ bool Server::handle_client(int clientSocket)
         std::string line = Parser::extractCommand(*client);
         IRCMessage message = Parser::parseLine(line);
 
-        CommandHandler::execute(*this, *client, message);
+       execute(*this, *client, message);
     }
 
     return true;

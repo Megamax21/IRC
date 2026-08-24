@@ -34,3 +34,16 @@ Si le channel n’existe pas, le premier utilisateur qui rejoint le crée et dev
 Si le channel est +i, il faut une invitation.
 Si le channel est +k, il faut la bonne clé.
 Si +l est actif, il faut vérifier la limite de membres.
+
+les réponses IRC ont cette forme :
+
+:server NUM nick channelName :message
+
+ex: :ircserv 475 Bob #secret :Cannot join channel (+k)
+
+CODES IRC
+461 : paramètres manquants
+403 : canal inexistant ou nom invalide
+471 : canal plein
+473 : canal en mode invite-only
+475 : clé incorrecte

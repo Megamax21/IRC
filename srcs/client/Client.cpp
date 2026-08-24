@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../headers/Client.hpp"
+#include "../../headers/Client.hpp"
 
 Client::Client(int fd)
     : _fd(fd),
@@ -46,6 +46,11 @@ const std::string& Client::get_username() const
 const std::string& Client::get_realname() const
 {
     return _realname;
+}
+
+std::string Client::get_prefix() const
+{
+    return (":" + _nickname + "!" + _username + "@localhost");
 }
 
 void Client::set_nickname(const std::string& nickname)

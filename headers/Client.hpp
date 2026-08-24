@@ -38,6 +38,7 @@ public:
     const std::string& get_nickname() const;
     const std::string& get_username() const;
     const std::string& get_realname() const;
+    std::string        get_prefix() const;
 
     void set_nickname(const std::string& nickname);
     void set_username(const std::string& username);

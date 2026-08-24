@@ -18,6 +18,7 @@ Channel::Channel()
         _key(""),
         _members(),
         _operators(),
+        _invited(),
         _inviteOnly(false),
         _topicRestricted(false),
         _hasKey(false),
@@ -31,6 +32,7 @@ Channel::Channel(const std::string &name)
         _key(""),
         _members(),
         _operators(),
+        _invited(),
         _inviteOnly(false),
         _topicRestricted(false),
         _hasKey(false),
@@ -52,6 +54,7 @@ Channel &Channel::operator=(const Channel &other)
         _key = other._key;
         _members = other._members;
         _operators = other._operators;
+        _invited = other._invited;
         _inviteOnly = other._inviteOnly;
         _topicRestricted = other._topicRestricted;
         _hasKey = other._hasKey;
@@ -169,6 +172,7 @@ void    Channel::removeMember(Client *client)
         return ;
     removeFromVector(_members, client);
     removeFromVector(_operators, client);
+    removeFromVector(_invited, client);
 }
 
 void    Channel::addOperator(Client *client)
