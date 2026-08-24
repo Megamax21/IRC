@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils_00.hpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ml-hote <ml-hote@student.42.fr>            +#+  +:+       +#+        */
+/*   By: sbehar <sbehar@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/16 13:40:38 by ml-hote           #+#    #+#             */
-/*   Updated: 2026/07/06 16:49:30 by ml-hote          ###   ########.fr       */
+/*   Updated: 2026/07/06 21:20:22 by sbehar           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@
 #include <cctype>
 #include <cstring>
 #include <cstdlib>
+#include <cstddef>
 #include <poll.h>
 #include <sys/socket.h>
 #include <memory>

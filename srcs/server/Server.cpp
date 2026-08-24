@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ml-hote <ml-hote@student.42.fr>            +#+  +:+       +#+        */
+/*   By: sbehar <sbehar@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/16 13:40:44 by ml-hote           #+#    #+#             */
-/*   Updated: 2026/06/19 04:22:25 by ml-hote          ###   ########.fr       */
+/*   Updated: 2026/07/08 21:31:09 by sbehar           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,4 +29,31 @@ Server::Server(int port, std::string password) : _password(password), _socket(0)
 Server::~Server()
 {
 	std::cout << "Server destructor called" << std::endl;
+}
+
+// On utilise std::map qui stocke des paires (std::pair<const Key, T>)
+// dans notre cas : std::pair<channel_name, Channel>
+// donc it->first est la clé, une string (channel_name)
+// et it->second est la valeur (Channel)
+
+Channel	*Server::getChannel(const std::string &name)
+{
+	std::map<std::string, Channel>::iterator it = _channels.find(name);
+	if (it == _channels.end())
+		return (NULL);
+	return (&it->second);
+}
+
+// insert -> ajoute un nouvel élément (clé/valeur)
+// et renvoie une paire (std::pair<iterator, bool>)
+// avec un itérateur sur l'élément, soit celui inséré, soit un élement déjà existant
+// & un booléen qui indique si l'insertion a réussi ou si la clé
+// existait déjà
+// make_pair -> crée une paire 
+
+Channel	*Server::createChannel(const std::string &name)
+{
+	std::pair<std::map<std::string, Channel>::iterator, bool> res =
+		_channels.insert(std::make_pair(name, Channel(name)));
+	return (&res.first->second);
 }

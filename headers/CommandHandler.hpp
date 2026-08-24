@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   CommandHandler.hpp                                 :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: sbehar <sbehar@student.42nice.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/07/06 22:27:06 by sbehar            #+#    #+#             */
+/*   Updated: 2026/07/06 22:27:06 by sbehar           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #pragma once
 
 #include "Parser.hpp"
@@ -59,4 +71,6 @@ private:
         const std::string& trailing);
 
     static bool isValidNickname(const std::string& nickname);
+
+    static void handleJoin(Server &server, Client &client, const IRCMessage &message);
 };
