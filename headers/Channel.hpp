@@ -25,6 +25,7 @@ class Channel
         std::string             _key;
         std::vector<Client*>    _members;
         std::vector<Client*>    _operators;
+        std::vector<Client*>    _invited;
         bool                    _inviteOnly; // +i
         bool                    _topicRestricted; // +t
         bool                    _hasKey;
@@ -56,11 +57,14 @@ class Channel
         size_t                          getMemberCount()    const;
         bool                            isMember(Client *client) const;
         bool                            isOperator(Client *client) const;
+        bool                            isInvited(Client *client) const;
         bool                            canJoin(Client *client) const;
         void                            addMember(Client *client);
         void                            removeMember(Client *client);
         void                            addOperator(Client *client);
         void                            removeOperator(Client *client);
+        void                            invite(Client *client);
+        void                            removeInvite(Client *client);
         void                            setTopic(const std::string &topic);
         void                            setInviteOnly(bool value);
         void                            setTopicRestricted(bool value);

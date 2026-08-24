@@ -63,17 +63,17 @@ Channel &Channel::operator=(const Channel &other)
 
 Channel::~Channel() {}
 
-const   std::string &Channel:getName()  const
+const   std::string &Channel::getName()  const
 {
     return (_name);
 }
 
-const   std::string &Channel:getTopic()  const
+const   std::string &Channel::getTopic()  const
 {
     return (_topic);
 }
 
-const   std::string &Channel:getKey()  const
+const   std::string &Channel::getKey()  const
 {
     return (_key);
 }
@@ -123,7 +123,7 @@ bool    Channel::isInVector(const std::vector<Client*> &vec, Client *client) con
     return (std::find(vec.begin(), vec.end(), client) != vec.end());
 }
 
-void    Channel::removeFromVector(const std::vector<Client*> &vec, Client *client)
+void    Channel::removeFromVector(std::vector<Client*> &vec, Client *client)
 {
     std::vector<Client*>::iterator  it = std::find(vec.begin(), vec.end(), client);
     if (it != vec.end())
@@ -140,10 +140,18 @@ bool    Channel::isOperator(Client *client) const
     return (isInVector(_operators, client));
 }
 
+bool    Channel::isInvited(Client *client) const
+{
+    return (isInVector(_invited, client));
+}
+
 bool    Channel::canJoin(Client *client) const
 {
-    (void)client;
+    if (!client)
+        return (false);
     if (_hasLimit && _members.size() >= _limit)
+        return (false);
+    if (_inviteOnly && !isInvited(client))
         return (false);
     return (true);
 }
@@ -175,6 +183,18 @@ void    Channel::removeOperator(Client *client)
     if (!client)
         return ;
     removeFromVector(_operators, client);
+}
+
+void    Channel::invite(Client *client)
+{
+    if (client && !isInvited(client))
+        _invited.push_back(client);
+}
+
+void    Channel::removeInvite(Client *client)
+{
+    if (client)
+        removeFromVector(_invited, client);
 }
 
 void    Channel::setTopic(const std::string &topic)
