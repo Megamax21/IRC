@@ -71,6 +71,8 @@ private:
         const std::string& trailing);
 
     static bool isValidNickname(const std::string& nickname);
+    bool        isValidChannelName(const std::string &name) const;
 
     static void handleJoin(Server &server, Client &client, const IRCMessage &message);
+    std::vector<std::string>split(const std::string &value, char delimiter);
 };

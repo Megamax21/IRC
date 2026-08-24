@@ -221,6 +221,21 @@ bool CommandHandler::isValidNickname(const std::string& nickname)
     return true;
 }
 
+bool CommandHandler::isValidChannelName(const std::string &name) const
+{
+    if (name.empty())
+        return (false);
+    if (name[0] != '#' && name[0] != '&')
+        return (false);
+    if (name.size() > 50)
+        return (false);
+    if (name.find(' ') != std::string::npos)
+        return (false);
+    if (name.find(',') != std::string::npos)
+        return (false);
+    return (true);
+}
+
 void CommandHandler::handleNick(Server& server, Client& client,
     const IRCMessage& message)
 {
@@ -334,4 +349,23 @@ void CommandHandler::handlePing(Server& server, Client& client,
 
     server.queue_message(client.get_fd(),
         ":ircserv PONG ircserv :" + message.params[0] + "\r\n");
+}
+
+std::vector<std::string> CommandHandler::split(const std::string &value, char delimiter)
+{
+    std::vector<std::string>    result;
+    std::string                 current;
+
+    for (size_t i = 0; i < value.size(); ++i)
+    {
+        if (value[i] == delimiter)
+        {
+            result.push_back(current);
+            current.clear();
+        }
+        else
+            current += value[i];
+    }
+    result.push_back(current);
+    return (result);
 }

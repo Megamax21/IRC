@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ServerLauncher.cpp                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ml-hote <ml-hote@student.42.fr>            +#+  +:+       +#+        */
+/*   By: sbehar <sbehar@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/19 03:23:23 by ml-hote           #+#    #+#             */
-/*   Updated: 2026/07/06 16:47:18 by ml-hote          ###   ########.fr       */
+/*   Updated: 2026/08/24 20:53:44 by sbehar           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -392,4 +392,26 @@ bool Server::send_queued_messages(int clientSocket)
         disable_pollout(clientSocket);
 
     return true;
+}
+
+void    Server::sendToClient(Client *client, const std::string &message)
+{
+    if (!client)
+        return ;
+    client->append_output(message);
+}
+
+void    Server::sendToChannel(Channel *channel, const std::string &message, Client *except)
+{
+    if (!channel)
+        return ;
+
+    const std::vector<Client*>  &members = channel->getMembers();
+    
+    for (std::vector<Client*>::const_iterator it = members.begin();
+        it != members.end(); ++it)
+    {
+        if (*it != except)
+            (*it)->append_output(message);
+    }
 }
