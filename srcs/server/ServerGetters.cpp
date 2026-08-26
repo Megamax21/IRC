@@ -6,7 +6,7 @@
 /*   By: sbehar <sbehar@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/19 03:29:40 by ml-hote           #+#    #+#             */
-/*   Updated: 2026/08/25 00:11:12 by sbehar           ###   ########.fr       */
+/*   Updated: 2026/08/26 21:50:06 by sbehar           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,17 +15,17 @@
 #include "../../headers/Parser.hpp"
 #include "../../headers/Commands.hpp"
 
-std::string	Server::get_password() const
+std::string	Server::getPassword() const
 {
 	return (this->_password);
 }
 
-int	Server::get_port() const
+int	Server::getPort() const
 {
 	return (this->_port);
 }
 
-int	Server::get_socket() const
+int	Server::getSocket() const
 {
 	return (this->_socket);
 }

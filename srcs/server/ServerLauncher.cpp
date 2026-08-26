@@ -6,7 +6,7 @@
 /*   By: sbehar <sbehar@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/19 03:23:23 by ml-hote           #+#    #+#             */
-/*   Updated: 2026/08/26 21:31:17 by sbehar           ###   ########.fr       */
+/*   Updated: 2026/08/26 22:12:03 by sbehar           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@
 	when you kill and restart your server quickly, the port stays
 	in a TIME_WAIT state for ~60 seconds
 */
-bool Server::create_socket()
+bool Server::createSocket()
 {
 	this->_socket = socket(AF_INET, SOCK_STREAM, 0);
 	if (this->_socket < 0)
@@ -61,7 +61,7 @@ bool Server::create_socket()
 	bind_socket() configures _address and binds _socket
 	to it, preparing the socket to later listen for connections.
 */
-bool Server::bind_socket()
+bool Server::bindSocket()
 {
 	this->_address.sin_family = AF_INET;
 	this->_address.sin_port = htons(this->_port);
@@ -85,7 +85,7 @@ bool Server::bind_socket()
 	start_listening() puts the socket into listening mode so the OS
 	starts queuing incoming connection requests on this port.
 */
-bool Server::start_listening()
+bool Server::startListening()
 {
 	if (listen(this->_socket, SOMAXCONN) < 0)
 	{
@@ -111,7 +111,7 @@ bool Server::start_listening()
 	accept_client() blocks until a client connects, then returns a
 	socket fd representing that specific client's connection.
 */
-int Server::accept_client()
+int Server::acceptClient()
 {
 	struct sockaddr_in clientAddress;
 	socklen_t clientLen = sizeof(clientAddress);
@@ -139,7 +139,7 @@ int Server::accept_client()
 	handle_client() reads one message from a connected client, echoes
 	it back, then closes that client's connection.
 */
-bool Server::handle_client(int clientSocket)
+bool Server::handleClient(int clientSocket)
 {
     char buffer[512];
 
@@ -153,12 +153,12 @@ bool Server::handle_client(int clientSocket)
         return false;
     }
 
-    Client* client = get_client(clientSocket);
+    Client* client = getClient(clientSocket);
 
     if (client == NULL)
         return false;
 
-    client->append_input(std::string(buffer, bytesRead));
+    client->appendInput(std::string(buffer, bytesRead));
 
     while (Parser::hasCompleteCommand(*client))
     {
@@ -186,15 +186,15 @@ bool Server::handle_client(int clientSocket)
 	server_launching() is the entry point that brings the socket from
 	creation to actively serving clients.
 */
-void Server::server_launching()
+void Server::serverLaunching()
 {
     struct pollfd serverPoll;
 
-    if (!create_socket())
+    if (!createSocket())
         return;
-    if (!bind_socket())
+    if (!bindSocket())
         return;
-    if (!start_listening())
+    if (!startListening())
         return;
 
     this->_pollFds.clear();
@@ -228,7 +228,7 @@ void Server::server_launching()
             if (revents & (POLLERR | POLLHUP | POLLNVAL))
             {
                 if (fd != this->_socket)
-                    remove_client(fd);
+                    removeClient(fd);
 
                 this->_pollFds.erase(this->_pollFds.begin() + i);
                 continue;
@@ -238,11 +238,11 @@ void Server::server_launching()
             {
                 if (revents & POLLIN)
                 {
-                    int clientSocket = accept_client();
+                    int clientSocket = acceptClient();
 
                     if (clientSocket >= 0)
                     {
-                        add_client(clientSocket);
+                        addClient(clientSocket);
 
                         struct pollfd clientPoll;
                         clientPoll.fd = clientSocket;
@@ -259,9 +259,9 @@ void Server::server_launching()
 
             if (revents & POLLIN)
             {
-                if (!handle_client(fd))
+                if (!handleClient(fd))
                 {
-                    remove_client(fd);
+                    removeClient(fd);
                     this->_pollFds.erase(this->_pollFds.begin() + i);
                     continue;
                 }
@@ -269,9 +269,9 @@ void Server::server_launching()
 
             if (revents & POLLOUT)
             {
-                if (!send_queued_messages(fd))
+                if (!sendQueuedMessages(fd))
                 {
-                    remove_client(fd);
+                    removeClient(fd);
                     this->_pollFds.erase(this->_pollFds.begin() + i);
                     continue;
                 }
@@ -285,12 +285,12 @@ void Server::server_launching()
     close(this->_socket);
 }
 
-void Server::add_client(int clientSocket)
+void Server::addClient(int clientSocket)
 {
     _clients[clientSocket] = new Client(clientSocket);
 }
 
-void Server::remove_client(int clientSocket)
+void Server::removeClient(int clientSocket)
 {
     std::map<int, Client*>::iterator it;
 
@@ -304,7 +304,7 @@ void Server::remove_client(int clientSocket)
     close(clientSocket);
 }
 
-Client* Server::get_client(int clientSocket)
+Client* Server::getClient(int clientSocket)
 {
     std::map<int, Client*>::iterator it;
 
@@ -321,13 +321,13 @@ Client  *Server::getClientByNickname(const std::string &nickname)
         it != _clients.end();
         ++it)
     {
-        if (it->second && it->second->get_nickname() == nickname)
+        if (it->second && it->second->getNickname() == nickname)
             return (it->second);
     }
     return (NULL);
 }
 
-bool Server::is_nickname_taken(const std::string& nickname,
+bool Server::isNicknameTaken(const std::string& nickname,
     int currentClientSocket) const
 {
     std::map<int, Client*>::const_iterator it;
@@ -335,13 +335,13 @@ bool Server::is_nickname_taken(const std::string& nickname,
     for (it = _clients.begin(); it != _clients.end(); ++it)
     {
         if (it->first != currentClientSocket
-            && it->second->get_nickname() == nickname)
+            && it->second->getNickname() == nickname)
             return true;
     }
     return false;
 }
 
-void Server::disable_pollout(int clientSocket)
+void Server::disablePollout(int clientSocket)
 {
     for (size_t i = 0; i < _pollFds.size(); ++i)
     {
@@ -353,7 +353,7 @@ void Server::disable_pollout(int clientSocket)
     }
 }
 
-void Server::enable_pollout(int clientSocket)
+void Server::enablePollout(int clientSocket)
 {
     for (size_t i = 0; i < _pollFds.size(); ++i)
     {
@@ -365,31 +365,31 @@ void Server::enable_pollout(int clientSocket)
     }
 }
 
-void Server::queue_message(int clientSocket, const std::string& message)
+void Server::queueMessage(int clientSocket, const std::string& message)
 {
     Client* client;
 
-    client = get_client(clientSocket);
+    client = getClient(clientSocket);
     if (client == NULL)
         return;
 
-    client->append_output(message);
-    enable_pollout(clientSocket);
+    client->appendOutput(message);
+    enablePollout(clientSocket);
 }
 
-bool Server::send_queued_messages(int clientSocket)
+bool Server::sendQueuedMessages(int clientSocket)
 {
     Client* client;
 
-    client = get_client(clientSocket);
+    client = getClient(clientSocket);
     if (client == NULL)
         return false;
 
-    std::string& output = client->get_output_buffer();
+    std::string& output = client->getOutputBuffer();
 
     if (output.empty())
     {
-        disable_pollout(clientSocket);
+        disablePollout(clientSocket);
         return true;
     }
 
@@ -401,7 +401,7 @@ bool Server::send_queued_messages(int clientSocket)
     output.erase(0, bytesSent);
 
     if (output.empty())
-        disable_pollout(clientSocket);
+        disablePollout(clientSocket);
 
     return true;
 }
@@ -410,7 +410,7 @@ void    Server::sendToClient(Client *client, const std::string &message)
 {
     if (!client)
         return ;
-    client->append_output(message);
+    client->appendOutput(message);
 }
 
 void    Server::sendToChannel(Channel *channel, const std::string &message, Client *except)
@@ -427,6 +427,6 @@ void    Server::sendToChannel(Channel *channel, const std::string &message, Clie
             continue;
         if (*it == except)
             continue;
-        queue_message((*it)->get_fd(), message);
+        queueMessage((*it)->getFd(), message);
     }
 }

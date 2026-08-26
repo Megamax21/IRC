@@ -21,16 +21,16 @@ void    sendJoinError(Client &client, int num, const std::string &channelName, c
 
     oss << ":ircserv ";
     oss << num << " ";
-    oss << client.get_nickname() << " ";
+    oss << client.getNickname() << " ";
     if (!channelName.empty())
         oss << channelName << " ";
     oss << ":" << reason << "\r\n";
-    client.append_output(oss.str());
+    client.appendOutput(oss.str());
 }
 
 void    sendJoinMessage(Server &server, Channel &channel, Client &client)
 {
-    std::string message = client.get_prefix() + " JOIN :" + channel.getName() + "\r\n";
+    std::string message = client.getPrefix() + " JOIN :" + channel.getName() + "\r\n";
     server.broadcastToChannel(&channel, message);
 }
 
@@ -38,7 +38,7 @@ void    sendJoinTopic(Channel &channel, Client &client)
 {
     if (channel.getTopic().empty())
         return ;
-    client.append_output(":ircserv 332 " + client.get_nickname() + " " +
+    client.appendOutput(":ircserv 332 " + client.getNickname() + " " +
         channel.getName() + " :" + channel.getTopic() + "\r\n");
 }
 
@@ -56,11 +56,11 @@ void    sendJoinNames(Channel &channel, Client &client)
             names += " ";
         if (channel.isOperator(*it))
             names += "@";
-        names += (*it)->get_nickname();
+        names += (*it)->getNickname();
     }
-    client.append_output(":ircserv 353 " + client.get_nickname()
+    client.appendOutput(":ircserv 353 " + client.getNickname()
         + " = " + channel.getName() + " :" + names + "\r\n");
-    client.append_output(":ircserv 366 " + client.get_nickname()
+    client.appendOutput(":ircserv 366 " + client.getNickname()
         + " " + channel.getName() + " :End of /NAMES list.\r\n");
 }
 
@@ -69,7 +69,7 @@ void    executeJoin(Server &server, Client &client, const IRCMessage &message)
     // si pas de paramètres -> erreur 461
     if (message.params.empty())
     {
-        client.append_output(":ircserv 461 " + client.get_nickname()
+        client.appendOutput(":ircserv 461 " + client.getNickname()
             + "JOIN :Not enough parameters\r\n");
         return ;
     }

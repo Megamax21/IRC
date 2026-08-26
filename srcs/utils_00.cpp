@@ -14,7 +14,7 @@
 
 #include "../headers/utils_00.hpp"
 
-bool	is_good_irc_port(char *s_port)
+bool	isGoodIrcPort(char *s_port)
 {
 	int i = 0;
 	while (s_port[i])
@@ -35,12 +35,12 @@ bool	is_good_irc_port(char *s_port)
 	return (true);
 }
 
-bool	args_parsing(int ac, char **av)
+bool	argsParsing(int ac, char **av)
 {
 	if (ac != 3)
 	{
 		std::cout << "Usage is : ./ircserv <port> <password>" << std::endl;
 		return (false);
 	}
-	return (is_good_irc_port(av[1]));
+	return (isGoodIrcPort(av[1]));
 }

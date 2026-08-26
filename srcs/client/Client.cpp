@@ -28,92 +28,92 @@ Client::~Client()
 {
 }
 
-int Client::get_fd() const
+int Client::getFd() const
 {
     return _fd;
 }
 
-const std::string& Client::get_nickname() const
+const std::string& Client::getNickname() const
 {
     return _nickname;
 }
 
-const std::string& Client::get_username() const
+const std::string& Client::getUsername() const
 {
     return _username;
 }
 
-const std::string& Client::get_realname() const
+const std::string& Client::getRealname() const
 {
     return _realname;
 }
 
-std::string Client::get_prefix() const
+std::string Client::getPrefix() const
 {
     return (":" + _nickname + "!" + _username + "@localhost");
 }
 
-void Client::set_nickname(const std::string& nickname)
+void Client::setNickname(const std::string& nickname)
 {
     _nickname = nickname;
 }
 
-void Client::set_username(const std::string& username)
+void Client::setUsername(const std::string& username)
 {
     _username = username;
 }
 
-void Client::set_realname(const std::string& realname)
+void Client::setRealname(const std::string& realname)
 {
     _realname = realname;
 }
 
-bool Client::is_password_accepted() const
+bool Client::isPasswordAccepted() const
 {
     return _passwordAccepted;
 }
 
-void Client::set_password_accepted(bool value)
+void Client::setPasswordAccepted(bool value)
 {
     _passwordAccepted = value;
 }
 
-bool Client::is_registered() const
+bool Client::isRegistered() const
 {
     return _registered;
 }
 
-void Client::set_registered(bool value)
+void Client::setRegistered(bool value)
 {
     _registered = value;
 }
 
-bool Client::has_nickname() const
+bool Client::hasNickname() const
 {
     return !_nickname.empty();
 }
 
-bool Client::has_username() const
+bool Client::hasUsername() const
 {
     return !_username.empty();
 }
 
-void Client::append_input(const std::string& data)
+void Client::appendInput(const std::string& data)
 {
     _inputBuffer += data;
 }
 
-std::string& Client::get_input_buffer()
+std::string& Client::getInputBuffer()
 {
     return _inputBuffer;
 }
 
-void Client::append_output(const std::string& data)
+void Client::appendOutput(const std::string& data)
 {
     _outputBuffer += data;
 }
 
-std::string& Client::get_output_buffer()
+std::string& Client::getOutputBuffer()
 {
     return _outputBuffer;
 }

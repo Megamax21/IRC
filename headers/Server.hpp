@@ -6,7 +6,7 @@
 /*   By: sbehar <sbehar@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/16 13:40:38 by ml-hote           #+#    #+#             */
-/*   Updated: 2026/08/26 21:23:16 by sbehar           ###   ########.fr       */
+/*   Updated: 2026/08/26 22:09:55 by sbehar           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,26 +41,26 @@ public:
     ~Server();
 
     // Getters
-    std::string get_password() const;
-    int         get_socket() const;
-    int         get_port() const;
+    std::string getPassword() const;
+    int         getSocket() const;
+    int         getPort() const;
 
     // Server creation methods
-    void    server_launching();
-    bool    create_socket();
-    bool    bind_socket();
-    bool    start_listening();
-    int     accept_client();
-    bool    handle_client(int clientSocket);
+    void    serverLaunching();
+    bool    createSocket();
+    bool    bindSocket();
+    bool    startListening();
+    int     acceptClient();
+    bool    handleClient(int clientSocket);
 
     // Client storage
-    void    add_client(int clientSocket);
-    void    remove_client(int clientSocket);
+    void    addClient(int clientSocket);
+    void    removeClient(int clientSocket);
     void    sendToClient(Client *client, const std::string &message);
-    Client* get_client(int clientSocket);
+    Client* getClient(int clientSocket);
     Client* getClientByNickname(const std::string& nickname);
 
-    bool    is_nickname_taken(const std::string& nickname,
+    bool    isNicknameTaken(const std::string& nickname,
                 int currentClientSocket) const;
 
     // Channel storage
@@ -71,15 +71,15 @@ public:
     void     broadcastToChannel(Channel *channel, const std::string &message);
 
     // Output queue
-    void    queue_message(int clientSocket, const std::string& message);
-    void    enable_pollout(int clientSocket);
-    void    disable_pollout(int clientSocket);
-    bool    send_queued_messages(int clientSocket);
+    void    queueMessage(int clientSocket, const std::string& message);
+    void    enablePollout(int clientSocket);
+    void    disablePollout(int clientSocket);
+    bool    sendQueuedMessages(int clientSocket);
 
     // Quit
-    bool    is_quit_client(int clientSocket);
-    void    mark_quit_client(int clientSocket);
-    void    unmark_quit_client(int clientSocket);
+    bool    isQuitClient(int clientSocket);
+    void    markQuitClient(int clientSocket);
+    void    unmarkQuitClient(int clientSocket);
 };
 
 #endif

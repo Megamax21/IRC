@@ -6,7 +6,7 @@
 /*   By: sbehar <sbehar@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/16 13:40:38 by ml-hote           #+#    #+#             */
-/*   Updated: 2026/07/06 21:20:22 by sbehar           ###   ########.fr       */
+/*   Updated: 2026/08/26 21:47:24 by sbehar           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,6 @@
 #include <netinet/in.h>
 #include <unistd.h>
 
-bool	args_parsing(int ac, char **av);
+bool	argsParsing(int ac, char **av);
 
 #endif

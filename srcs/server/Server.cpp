@@ -6,7 +6,7 @@
 /*   By: sbehar <sbehar@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/16 13:40:44 by ml-hote           #+#    #+#             */
-/*   Updated: 2026/08/25 00:29:10 by sbehar           ###   ########.fr       */
+/*   Updated: 2026/08/26 22:11:46 by sbehar           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ void	Server::removeClientFromAllChannels(Client *client)
 			continue;
 		
 		std::string	message = 
-			client->get_prefix() +
+			client->getPrefix() +
 			" PART " +
 			channel.getName() +
 			" : Leaving all channels\r\n";
@@ -90,6 +90,6 @@ void	Server::broadcastToChannel(Channel *channel, const std::string &message)
 		it != members.end(); ++it)
 	{
 		if (*it)
-			queue_message((*it)->get_fd(), message);
+			queueMessage((*it)->getFd(), message);
 	}
 }

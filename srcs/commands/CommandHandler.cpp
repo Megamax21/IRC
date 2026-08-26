@@ -118,7 +118,7 @@ void    execute(Server& server, Client& client,
         handlePing(server, client, message);
     else if (type == CMD_JOIN)
     {
-        if (!client.is_registered())
+        if (!client.isRegistered())
         {
             sendNumeric(server, client, "451", "", "You have not registered");
             return;
@@ -127,7 +127,7 @@ void    execute(Server& server, Client& client,
     }
     else if (type == CMD_PRIVMSG)
     {
-        if (!client.is_registered())
+        if (!client.isRegistered())
         {
             sendNumeric(server, client, "451", "", "You have not registered");
             return;
@@ -138,7 +138,7 @@ void    execute(Server& server, Client& client,
         sendNumeric(server, client, "421", message.command, "Unknown command");
     else
     {
-        if (!client.is_registered())
+        if (!client.isRegistered())
             sendNumeric(server, client, "451", "", "You have not registered");
     }
 }
@@ -150,10 +150,10 @@ void    sendNumeric(Server& server, const Client& client,
 {
     std::string target;
 
-    if (client.get_nickname().empty())
+    if (client.getNickname().empty())
         target = "*";
     else
-        target = client.get_nickname();
+        target = client.getNickname();
 
     std::string reply = ":ircserv " + code + " " + target;
 
@@ -162,13 +162,13 @@ void    sendNumeric(Server& server, const Client& client,
 
     reply += " :" + trailing + "\r\n";
 
-    server.queue_message(client.get_fd(), reply);
+    server.queueMessage(client.getFd(), reply);
 }
 
 void    handlePass(Server& server, Client& client,
     const IRCMessage& message)
 {
-    if (client.is_registered())
+    if (client.isRegistered())
     {
         sendNumeric(server, client, "462", "", "You may not reregister");
         return;
@@ -180,14 +180,14 @@ void    handlePass(Server& server, Client& client,
         return;
     }
 
-    if (message.params[0] != server.get_password())
+    if (message.params[0] != server.getPassword())
     {
-        client.set_password_accepted(false);
+        client.setPasswordAccepted(false);
         sendNumeric(server, client, "464", "", "Password incorrect");
         return;
     }
 
-    client.set_password_accepted(true);
+    client.setPasswordAccepted(true);
     tryRegister(server, client);
 }
 
@@ -266,21 +266,21 @@ void    handleNick(Server& server, Client& client,
         return;
     }
 
-    if (server.is_nickname_taken(nickname, client.get_fd()))
+    if (server.isNicknameTaken(nickname, client.getFd()))
     {
         sendNumeric(server, client, "433", nickname,
             "Nickname is already in use");
         return;
     }
 
-    client.set_nickname(nickname);
+    client.setNickname(nickname);
     tryRegister(server, client);
 }
 
 void    handleUser(Server& server, Client& client,
     const IRCMessage& message)
 {
-    if (client.is_registered())
+    if (client.isRegistered())
     {
         sendNumeric(server, client, "462", "", "You may not reregister");
         return;
@@ -292,37 +292,37 @@ void    handleUser(Server& server, Client& client,
         return;
     }
 
-    client.set_username(message.params[0]);
-    client.set_realname(message.params[3]);
+    client.setUsername(message.params[0]);
+    client.setRealname(message.params[3]);
 
     tryRegister(server, client);
 }
 
 void    tryRegister(Server& server, Client& client)
 {
-    if (client.is_registered())
+    if (client.isRegistered())
         return;
 
-    if (!client.is_password_accepted())
+    if (!client.isPasswordAccepted())
         return;
 
-    if (!client.has_nickname())
+    if (!client.hasNickname())
         return;
 
-    if (!client.has_username())
+    if (!client.hasUsername())
         return;
 
-    client.set_registered(true);
+    client.setRegistered(true);
 
-    server.queue_message(client.get_fd(),
-        ":ircserv 001 " + client.get_nickname()
+    server.queueMessage(client.getFd(),
+        ":ircserv 001 " + client.getNickname()
         + " :Welcome to the ft_irc network "
-        + client.get_nickname()
-        + "!" + client.get_username()
+        + client.getNickname()
+        + "!" + client.getUsername()
         + "@localhost\r\n");
 
-    server.queue_message(client.get_fd(),
-        ":ircserv 422 " + client.get_nickname()
+    server.queueMessage(client.getFd(),
+        ":ircserv 422 " + client.getNickname()
         + " :MOTD File is missing\r\n");
 }
 
@@ -336,7 +336,7 @@ void    handleCap(Server& server, Client& client,
 
     if (sub == "LS")
     {
-        server.queue_message(client.get_fd(),
+        server.queueMessage(client.getFd(),
             ":ircserv CAP * LS :\r\n");
     }
     else if (sub == "REQ")
@@ -346,7 +346,7 @@ void    handleCap(Server& server, Client& client,
         if (message.params.size() > 1)
             capability = message.params[1];
 
-        server.queue_message(client.get_fd(),
+        server.queueMessage(client.getFd(),
             ":ircserv CAP * NAK :" + capability + "\r\n");
     }
 }
@@ -360,7 +360,7 @@ void    handlePing(Server& server, Client& client,
         return;
     }
 
-    server.queue_message(client.get_fd(),
+    server.queueMessage(client.getFd(),
         ":ircserv PONG ircserv :" + message.params[0] + "\r\n");
 }
 

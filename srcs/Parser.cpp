@@ -16,12 +16,12 @@
 
 bool Parser::hasCompleteCommand(Client& client)
 {
-    return client.get_input_buffer().find('\n') != std::string::npos;
+    return client.getInputBuffer().find('\n') != std::string::npos;
 }
 
 std::string Parser::extractCommand(Client& client)
 {
-    std::string& buffer = client.get_input_buffer();
+    std::string& buffer = client.getInputBuffer();
     size_t pos = buffer.find('\n');
 
     std::string line = buffer.substr(0, pos);

@@ -50,7 +50,7 @@ void    executePrivMsg(Server &server, Client &client, const IRCMessage &message
 
         // Le message IRC doit contenir : :sender!user@host PRIVMSG #channel :text
         // Il nous faut juste envoyer le message aux autres membres
-        std::string outgoing = client.get_prefix() +
+        std::string outgoing = client.getPrefix() +
                             " PRIVMSG " +
                             target + " :" + text + "\r\n";
         
@@ -66,10 +66,10 @@ void    executePrivMsg(Server &server, Client &client, const IRCMessage &message
         return;
     }
 
-    std::string outgoing = client.get_prefix() +
+    std::string outgoing = client.getPrefix() +
                             " PRIVMSG " +
-                            recipient->get_nickname() +
+                            recipient->getNickname() +
                             " :" + text + "\r\n";
     
-    server.queue_message(recipient->get_fd(), outgoing);
+    server.queueMessage(recipient->getFd(), outgoing);
 }
