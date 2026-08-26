@@ -6,7 +6,7 @@
 /*   By: sbehar <sbehar@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/19 03:23:23 by ml-hote           #+#    #+#             */
-/*   Updated: 2026/08/25 00:10:57 by sbehar           ###   ########.fr       */
+/*   Updated: 2026/08/26 21:31:17 by sbehar           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -315,6 +315,18 @@ Client* Server::get_client(int clientSocket)
     return it->second;
 }
 
+Client  *Server::getClientByNickname(const std::string &nickname)
+{
+    for (std::map<int, Client*>::iterator it = _clients.begin();
+        it != _clients.end();
+        ++it)
+    {
+        if (it->second && it->second->get_nickname() == nickname)
+            return (it->second);
+    }
+    return (NULL);
+}
+
 bool Server::is_nickname_taken(const std::string& nickname,
     int currentClientSocket) const
 {
@@ -411,7 +423,10 @@ void    Server::sendToChannel(Channel *channel, const std::string &message, Clie
     for (std::vector<Client*>::const_iterator it = members.begin();
         it != members.end(); ++it)
     {
-        if (*it != except)
-            (*it)->append_output(message);
+        if (!*it)
+            continue;
+        if (*it == except)
+            continue;
+        queue_message((*it)->get_fd(), message);
     }
 }

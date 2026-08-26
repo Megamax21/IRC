@@ -4,8 +4,8 @@
 
 COMMANDES IRC:
 • [X] JOIN -> regarder pourquoi l'onglet du channel n'est pas supprimé lors du JOIN 0
-• Gérer l'affichage des messages de chaque utilisateur dans un channel pour autrui
-• [ ] PRIVMSG
+• [X] Gérer le BROADCAST des messages de chaque utilisateur dans un channel pour autrui
+• [X] PRIVMSG
 • [ ] KICK
 • [ ] INVITE
 • [ ] TOPIC

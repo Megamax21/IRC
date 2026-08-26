@@ -125,6 +125,15 @@ void    execute(Server& server, Client& client,
         }
         executeJoin(server, client, message);
     }
+    else if (type == CMD_PRIVMSG)
+    {
+        if (!client.is_registered())
+        {
+            sendNumeric(server, client, "451", "", "You have not registered");
+            return;
+        }
+        executePrivMsg(server, client, message);
+    }
     else if (type == CMD_UNKNOWN)
         sendNumeric(server, client, "421", message.command, "Unknown command");
     else

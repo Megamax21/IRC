@@ -6,7 +6,7 @@
 /*   By: sbehar <sbehar@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/16 13:40:38 by ml-hote           #+#    #+#             */
-/*   Updated: 2026/08/25 00:10:49 by sbehar           ###   ########.fr       */
+/*   Updated: 2026/08/26 21:23:16 by sbehar           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,7 @@ public:
     void    remove_client(int clientSocket);
     void    sendToClient(Client *client, const std::string &message);
     Client* get_client(int clientSocket);
+    Client* getClientByNickname(const std::string& nickname);
 
     bool    is_nickname_taken(const std::string& nickname,
                 int currentClientSocket) const;

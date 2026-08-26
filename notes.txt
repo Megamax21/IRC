@@ -30,6 +30,9 @@ Quand un client envoie JOIN #salon, le serveur doit :
 - si c’est le premier membre, le rendre opérateur
 - envoyer les réponses IRC attendues, notamment le topic et la liste des membres
 
+le client peut rejoindre plusieurs channel en même temps via join :
+/join #a,#b,#c
+
 Si le channel n’existe pas, le premier utilisateur qui rejoint le crée et devient opérateur.
 Si le channel est +i, il faut une invitation.
 Si le channel est +k, il faut la bonne clé.
@@ -47,3 +50,15 @@ CODES IRC
 471 : canal plein
 473 : canal en mode invite-only
 475 : clé incorrecte
+
+privmsg:
+
+/privmsg #channel message 
+pour un privmsg envoyé dans un channel
+
+/privmsg nickname :message
+pour un privmsg envoyé a un utilisateur*
+
+-> l'expéditeur ne voit pas son propre message lorsqu'il fait un privmsg
+(comportement classique de hexchat)
+

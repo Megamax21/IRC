@@ -12,7 +12,8 @@ SRCS = srcs/main.cpp \
 		srcs/client/Client.cpp \
 		srcs/channel/Channel.cpp \
 		srcs/commands/CommandHandler.cpp \
-		srcs/commands/Join.cpp
+		srcs/commands/Join.cpp \
+		srcs/commands/PrivMsg.cpp
 
 HEADERS = headers/Server.hpp \
 		  headers/utils_00.hpp \
