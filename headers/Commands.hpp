@@ -61,5 +61,6 @@ void handleCap(Server& server, Client& client, const IRCMessage& message);
 void handlePing(Server& server, Client& client, const IRCMessage& message);
 void executeJoin(Server &server, Client &client, const IRCMessage &message);
 void executePrivMsg(Server &server, Client &client, const IRCMessage &message);
+void executeKick(Server &server, Client &client, const IRCMessage &message);
 
 void leaveAllChannels(Server &server, Client &client);

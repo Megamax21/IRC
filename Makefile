@@ -13,7 +13,8 @@ SRCS = srcs/main.cpp \
 		srcs/channel/Channel.cpp \
 		srcs/commands/CommandHandler.cpp \
 		srcs/commands/Join.cpp \
-		srcs/commands/PrivMsg.cpp
+		srcs/commands/PrivMsg.cpp \
+		srcs/commands/Kick.cpp
 
 HEADERS = headers/Server.hpp \
 		  headers/utils_00.hpp \

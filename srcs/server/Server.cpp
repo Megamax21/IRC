@@ -6,7 +6,7 @@
 /*   By: sbehar <sbehar@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/16 13:40:44 by ml-hote           #+#    #+#             */
-/*   Updated: 2026/08/26 22:11:46 by sbehar           ###   ########.fr       */
+/*   Updated: 2026/09/01 01:26:32 by sbehar           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,13 @@ Channel	*Server::createChannel(const std::string &name)
 	std::pair<std::map<std::string, Channel>::iterator, bool> res =
 		_channels.insert(std::make_pair(name, Channel(name)));
 	return (&res.first->second);
+}
+
+void	Server::deleteChannel(const std::string &name)
+{
+	std::map<std::string, Channel>::iterator it = _channels.find(name);
+	if (it != _channels.end())
+		_channels.erase(it);
 }
 
 void	Server::removeClientFromAllChannels(Client *client)

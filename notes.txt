@@ -62,3 +62,13 @@ pour un privmsg envoyé a un utilisateur*
 -> l'expéditeur ne voit pas son propre message lorsqu'il fait un privmsg
 (comportement classique de hexchat)
 
+kick:
+
+KICK <channel> <nick> [<reason>]
+ex: KICK #a sarah OU KICK #a sarah :spam
+
+le serveur doit envoyer à tous les membres du channel puis retirer sarah du channel
+:alice!alice@localhost KICK #a sarah :spam\r\n
+
+le message KICK doit être reçu par tous les membres du channel, 
+y compris la personne kickée

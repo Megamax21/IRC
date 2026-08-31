@@ -6,7 +6,7 @@
 /*   By: sbehar <sbehar@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/16 13:40:38 by ml-hote           #+#    #+#             */
-/*   Updated: 2026/08/26 22:09:55 by sbehar           ###   ########.fr       */
+/*   Updated: 2026/09/01 01:24:50 by sbehar           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,6 +66,7 @@ public:
     // Channel storage
     Channel* getChannel(const std::string& name);
     Channel* createChannel(const std::string& name);
+    void     deleteChannel(const std::string &name);
     void     sendToChannel(Channel *channel, const std::string &message, Client *except);
     void     removeClientFromAllChannels(Client *client);
     void     broadcastToChannel(Channel *channel, const std::string &message);

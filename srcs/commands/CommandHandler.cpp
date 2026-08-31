@@ -134,6 +134,15 @@ void    execute(Server& server, Client& client,
         }
         executePrivMsg(server, client, message);
     }
+    else if (type == CMD_KICK)
+    {
+        if (!client.isRegistered())
+        {
+            sendNumeric(server, client, "451", "", "You have not registered");
+            return;
+        }
+        executeKick(server, client, message);
+    }
     else if (type == CMD_UNKNOWN)
         sendNumeric(server, client, "421", message.command, "Unknown command");
     else
