@@ -6,7 +6,7 @@ COMMANDES IRC:
 • [X] JOIN -> regarder pourquoi l'onglet du channel n'est pas supprimé lors du JOIN 0
 • [X] Gérer le BROADCAST des messages de chaque utilisateur dans un channel pour autrui
 • [X] PRIVMSG
-• [ ] KICK
+• [X] KICK
 • [ ] INVITE
 • [ ] TOPIC
 • [ ] MODE

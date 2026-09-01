@@ -64,6 +64,7 @@ class Channel
         void                            addOperator(Client *client);
         void                            removeOperator(Client *client);
         void                            invite(Client *client);
+        void                            addInvite(Client *client);
         void                            removeInvite(Client *client);
         void                            setTopic(const std::string &topic);
         void                            setInviteOnly(bool value);

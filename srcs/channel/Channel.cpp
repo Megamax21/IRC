@@ -195,6 +195,13 @@ void    Channel::invite(Client *client)
         _invited.push_back(client);
 }
 
+void    Channel::addInvite(Client *client)
+{
+    if (!client || isInvited(client))
+        return;
+    _invited.push_back(client);
+}
+
 void    Channel::removeInvite(Client *client)
 {
     if (client)

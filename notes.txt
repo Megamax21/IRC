@@ -72,3 +72,21 @@ le serveur doit envoyer à tous les membres du channel puis retirer sarah du cha
 
 le message KICK doit être reçu par tous les membres du channel, 
 y compris la personne kickée
+
+invite:
+
+INVITE <nick> <channel>
+ex: INVITE sarah #a
+
+le serveur doit envoyer :
+- à sarah : 
+:alice!alice@localhost INVITE sarah #a\r\n
+
+- à alice :
+:ircserv 341 alice sarah #a\r\n
+
+- à sarah (si le channel a un topic)
+:ircserv 324 #a +i ...\r\n
+
+puis sarah peut rejoindre avec JOIN #channel
+(même si le channel est en mode +i)
