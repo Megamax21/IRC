@@ -1,5 +1,7 @@
 IRC NOTES:
 
+mot de passe du server : 1234
+
 Server : reçoit la ligne brute, identifie la commande, vérifie que le client est enregistré.
 Commands : découpe les arguments et applique les règles IRC.
 Channel : modifie son propre état et expose des méthodes simples.
@@ -75,7 +77,7 @@ y compris la personne kickée
 
 invite:
 
-INVITE <nick> <channel>
+/invite <nick> <channel>
 ex: INVITE sarah #a
 
 le serveur doit envoyer :
