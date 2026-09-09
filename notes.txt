@@ -66,7 +66,7 @@ pour un privmsg envoyé a un utilisateur*
 
 kick:
 
-KICK <channel> <nick> [<reason>]
+KICK #channel <nick> :[<reason>]
 ex: KICK #a sarah OU KICK #a sarah :spam
 
 le serveur doit envoyer à tous les membres du channel puis retirer sarah du channel
@@ -77,7 +77,7 @@ y compris la personne kickée
 
 invite:
 
-/invite <nick> <channel>
+/invite <nick> #channel
 ex: INVITE sarah #a
 
 le serveur doit envoyer :
@@ -92,3 +92,17 @@ le serveur doit envoyer :
 
 puis sarah peut rejoindre avec JOIN #channel
 (même si le channel est en mode +i)
+
+topic:
+
+/topic #channel [<topic>]
+
+sans <topic> : le server renvoie le topic actuel
+avec <topic> : le server change le topic, si les modes du channel l'autorisent
+
+pour pouvoir retirer le topic du server, on fait :
+
+/topic #channel :
+dans l'implémentation on considère ":" comme un topic vide -> donc un topic ne pourra pas
+s'appeler juste ":"
+-> un topic doit être constitué d'au moins 1 caractère alphanumérique

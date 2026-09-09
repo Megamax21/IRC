@@ -7,6 +7,6 @@ COMMANDES IRC:
 • [X] Gérer le BROADCAST des messages de chaque utilisateur dans un channel pour autrui
 • [X] PRIVMSG
 • [X] KICK
-• [ ] INVITE
-• [ ] TOPIC
+• [X] INVITE
+• [X] TOPIC
 • [ ] MODE
