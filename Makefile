@@ -16,7 +16,8 @@ SRCS = srcs/main.cpp \
 		srcs/commands/PrivMsg.cpp \
 		srcs/commands/Kick.cpp \
 		srcs/commands/Invite.cpp \
-		srcs/commands/Topic.cpp
+		srcs/commands/Topic.cpp \
+		srcs/commands/Mode.cpp
 
 HEADERS = headers/Server.hpp \
 		  headers/utils_00.hpp \

@@ -64,5 +64,6 @@ void executePrivMsg(Server &server, Client &client, const IRCMessage &message);
 void executeKick(Server &server, Client &client, const IRCMessage &message);
 void executeInvite(Server &server, Client &client, const IRCMessage &message);
 void executeTopic(Server &server, Client &client, const IRCMessage &message);
+void executeMode(Server &server, Client &client, const IRCMessage &message);
 
 void leaveAllChannels(Server &server, Client &client);

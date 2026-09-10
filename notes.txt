@@ -37,7 +37,7 @@ le client peut rejoindre plusieurs channel en même temps via join :
 
 Si le channel n’existe pas, le premier utilisateur qui rejoint le crée et devient opérateur.
 Si le channel est +i, il faut une invitation.
-Si le channel est +k, il faut la bonne clé.
+Si le channel est +k, il faut la bonne clé. /join #a password
 Si +l est actif, il faut vérifier la limite de membres.
 
 les réponses IRC ont cette forme :
@@ -106,3 +106,20 @@ pour pouvoir retirer le topic du server, on fait :
 dans l'implémentation on considère ":" comme un topic vide -> donc un topic ne pourra pas
 s'appeler juste ":"
 -> un topic doit être constitué d'au moins 1 caractère alphanumérique
+
+mode:
+
+/mode #channel [<modes>] [<args>]
+
+• +i/-i : invite-only / no invite-only
+• +t/-t : topic restricted / tout le mode peut changer le topic
+• +k <key> / -k <key> : définir la clé / retirer la clé
+• +o <nick> / -o <nick>: donner/retirer le statut d'opérateur à un user
+• +l <limit> / -l : définir la limite / retirer la limite
+
+on traite les modes caractère par caractère : 1 seul mode par commande
+seuls les opérateurs peuvent changer les modes du channel
+
+args[0] = channel
+args[1] = modeStr (+i, +k, etc...)
+args[2] = premier arg (clé, nick, limite, etc...)
