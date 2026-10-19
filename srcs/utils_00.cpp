@@ -44,3 +44,12 @@ bool	argsParsing(int ac, char **av)
 	}
 	return (isGoodIrcPort(av[1]));
 }
+
+const std::string	lowerString(std::string input)
+{
+	std::string	output = "";
+
+	for (int i = 0; i < (int)input.length() ; i++)
+		output.push_back(tolower(input.c_str()[i]));
+	return (output);
+}

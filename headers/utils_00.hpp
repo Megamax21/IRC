@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils_00.hpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sbehar <sbehar@student.42nice.fr>          +#+  +:+       +#+        */
+/*   By: ml-hote <ml-hote@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/16 13:40:38 by ml-hote           #+#    #+#             */
-/*   Updated: 2026/08/26 21:47:24 by sbehar           ###   ########.fr       */
+/*   Updated: 2026/10/19 15:50:27 by ml-hote          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,5 +33,6 @@
 #include <unistd.h>
 
 bool	argsParsing(int ac, char **av);
+const	std::string	lowerString(std::string input);
 
 #endif
