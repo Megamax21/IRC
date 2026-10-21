@@ -1,6 +1,4 @@
 NAME = ircserv
-BONUS_NAME = ircserv_bonus
-
 CXX = c++
 CXXFLAGS = -Wall -Wextra -Werror -g -std=c++98
 
@@ -28,11 +26,8 @@ HEADERS = headers/Server.hpp \
 		  headers/Commands.hpp
 
 MANDATORY_SRCS = $(addprefix mandatory/,$(SRCS))
-BONUS_SRCS = $(addprefix bonus/,$(SRCS))
 MANDATORY_HEADERS = $(addprefix mandatory/,$(HEADERS))
-BONUS_HEADERS = $(addprefix bonus/,$(HEADERS))
 MANDATORY_OBJS = $(MANDATORY_SRCS:.cpp=.o)
-BONUS_OBJS = $(BONUS_SRCS:.cpp=.o)
 
 # Mandatory
 all: $(NAME)
@@ -43,22 +38,13 @@ $(NAME): $(MANDATORY_OBJS)
 $(MANDATORY_OBJS): mandatory/%.o: mandatory/%.cpp $(MANDATORY_HEADERS)
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 
-# Bonus
-bonus: $(BONUS_NAME)
-
-$(BONUS_NAME): $(BONUS_OBJS)
-	$(CXX) $(CXXFLAGS) -o $@ $^
-
-$(BONUS_OBJS): bonus/%.o: bonus/%.cpp $(BONUS_HEADERS)
-	$(CXX) $(CXXFLAGS) -c $< -o $@
-
 # Cleanup
 clean:
-	rm -f $(MANDATORY_OBJS) $(BONUS_OBJS)
+	rm -f $(MANDATORY_OBJS)
 
 fclean: clean
-	rm -f $(NAME) $(BONUS_NAME)
+	rm -f $(NAME)
 
 re: fclean all
 
-.PHONY: all bonus clean fclean re
+.PHONY: all clean fclean re
