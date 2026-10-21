@@ -329,6 +329,7 @@ void    handleUser(Server& server, Client& client,
 	}
 
 	client.setUsername(message.params[0]);
+	std::cout << " under username => " << message.params[0] << std::endl;
 	client.setRealname(message.params[3]);
 
 	tryRegister(server, client);

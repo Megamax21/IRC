@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ServerLauncher.cpp                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sbehar <sbehar@student.42nice.fr>          +#+  +:+       +#+        */
+/*   By: ml-hote <ml-hote@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/19 03:23:23 by ml-hote           #+#    #+#             */
-/*   Updated: 2026/08/26 22:12:03 by sbehar           ###   ########.fr       */
+/*   Updated: 2026/10/22 01:12:06 by ml-hote          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,7 +122,7 @@ int Server::acceptClient()
 		std::cerr << "Error: accept() failed" << std::endl;
 		return -1;
 	}
-	std::cout << "New client connected: " << inet_ntoa(clientAddress.sin_addr) << std::endl;
+	std::cout << "New client connected: " << inet_ntoa(clientAddress.sin_addr);
 	return clientSocket;
 }
 
@@ -149,7 +149,7 @@ bool Server::handleClient(int clientSocket)
 
     if (bytesRead <= 0)
     {
-        std::cout << "Client " << clientSocket << " disconnected" << std::endl;
+        std::cout << "Client " << clientSocket << " \"" << _clients[clientSocket]->getUsername() << "\" "<< "disconnected" << std::endl;
         return false;
     }
 
