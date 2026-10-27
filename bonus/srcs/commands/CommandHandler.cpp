@@ -313,7 +313,7 @@ void    handleNick(Server& server, Client& client,
 	tryRegister(server, client);
 }
 
-void    handleUser(Server& server, Client& client,
+void	handleUser(Server& server, Client& client,
 	const IRCMessage& message)
 {
 	if (client.isRegistered())
@@ -331,7 +331,7 @@ void    handleUser(Server& server, Client& client,
 	client.setUsername(message.params[0]);
 	std::cout << " under username => " << message.params[0] << std::endl;
 	client.setRealname(message.params[3]);
-
+	server.sendToClient(&client, "[SERVER] : Welcome to our IRC server !\n");
 	tryRegister(server, client);
 }
 
