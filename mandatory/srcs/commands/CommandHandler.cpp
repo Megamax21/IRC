@@ -355,7 +355,7 @@ void    tryRegister(Server& server, Client& client)
 		":ircserv 001 " + client.getNickname()
 		+ " :Welcome to the ft_irc network "
 		+ client.getNickname()
-		+ "!" + client.getUsername()
+		+ " ! " + client.getUsername()
 		+ "@localhost\r\n");
 
 	server.queueMessage(client.getFd(),
