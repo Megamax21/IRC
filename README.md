@@ -105,7 +105,9 @@ In an IRC client such as Hexchat:
 |---|---|---|
 
 | `JOIN` | `/join #general` | Joins or creates a channel |
+
 | `JOIN` | `/join #a,#b,#c` | Joins several channels |
+
 | `JOIN` | `/join #secret mypassword` | Joins a key-protected channel |
 | `PRIVMSG` | `/privmsg #general :Hello!` | Sends a message to a channel |
 | `PRIVMSG` | `/privmsg alice :Hi!` | Sends a private message to a user |
