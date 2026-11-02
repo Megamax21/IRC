@@ -37,7 +37,7 @@ The server allows users to authenticate, choose a nickname, join channels, excha
 Clone the repository and build the project:
 
 ```bash
-git clone [https://github.com/Megamax21/IRC] (https://github.com/Megamax21/IRC)
+git clone [https://github.com/Megamax21/IRC]
 cd ft_irc
 make
 ```
