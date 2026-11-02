@@ -36,6 +36,7 @@ enum e_command_type
     CMD_CAP,
     CMD_PING,
     CMD_QUIT,
+    CMD_WHO,
     CMD_UNKNOWN
 };
 

@@ -60,6 +60,8 @@ e_command_type  getCommandType(const IRCMessage& message)
 		return CMD_CAP;
 	if (command == "PING")
 		return CMD_PING;
+	if (command == "WHO")
+		return CMD_WHO;
 	if (command == "QUIT")
 		return CMD_QUIT;
 
@@ -92,6 +94,8 @@ const char* getCommandName(e_command_type type)
 		return "CAP";
 	if (type == CMD_PING)
 		return "PING";
+	if (type == CMD_WHO)
+		return "WHO";
 	if (type == CMD_QUIT)
 		return "QUIT";
 
@@ -170,6 +174,8 @@ void    execute(Server& server, Client& client,
 		}
 		executeMode(server, client, message);
 	}
+	else if (type == CMD_WHO)
+		return ;
 	else if (type == CMD_UNKNOWN)
 		sendNumeric(server, client, "421", message.command, "Unknown command");
 	else
