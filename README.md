@@ -150,7 +150,7 @@ In an IRC client such as Hexchat:
 
 - [Poll Command](https://man7.org/linux/man-pages/man2/poll.2.html)
 - [IRC Commands](https://www.techbull.com/techbull/guide/internet/irccommande.html)
-- [C++ Error Replies Codes](https://www.irchelp.org/protocol/rfc/chapter6.html)
+- [IRC Error Replies Codes](https://www.irchelp.org/protocol/rfc/chapter6.html)
 - [IRC Protocol](https://mathieu-lemoine.developpez.com/tutoriels/irc/protocole/?page=commandes)
 - [C++ Reference](https://en.cppreference.com/w/)
 - [C++ Maps](https://www.geeksforgeeks.org/cpp/map-associative-containers-the-c-standard-template-library-stl/)
