@@ -315,8 +315,22 @@ void    handleNick(Server& server, Client& client,
 		return;
 	}
 
+	const bool			wasRegistered = client.isRegistered();
+
+	if (wasRegistered && client.getNickname() == nickname)
+		return;
+	
+	const std::string	oldPrefix = client.getPrefix();
+
 	client.setNickname(nickname);
-	tryRegister(server, client);
+
+	if (wasRegistered)
+	{
+		const std::string	reply = oldPrefix + " NICK :" + nickname + "\r\n";
+		server.broadcastToSharedChannels(client, reply);
+	}
+	else
+		tryRegister(server, client);
 }
 
 void    handleUser(Server& server, Client& client,

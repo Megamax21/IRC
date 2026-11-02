@@ -6,7 +6,7 @@
 /*   By: sbehar <sbehar@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/16 13:40:44 by ml-hote           #+#    #+#             */
-/*   Updated: 2026/09/01 01:26:32 by sbehar           ###   ########.fr       */
+/*   Updated: 2026/11/02 18:28:23 by sbehar           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,5 +98,34 @@ void	Server::broadcastToChannel(Channel *channel, const std::string &message)
 	{
 		if (*it)
 			queueMessage((*it)->getFd(), message);
+	}
+}
+
+void	Server::broadcastToSharedChannels(Client &client, const std::string &message)
+{
+	std::set<int> targets;
+
+	// Le client reçoit le message même s'il n'est dans aucun salon
+	targets.insert(client.getFd());
+	for (std::map<std::string, Channel>::iterator it = _channels.begin();
+		it != _channels.end(); ++it)
+	{
+		Channel	&channel = it->second;
+
+		if (!channel.isMember(&client))
+			continue;
+		
+		const std::vector<Client*>	&members = channel.getMembers();
+
+		for (std::vector<Client*>::const_iterator member = members.begin(); member != members.end(); ++member)
+		{
+			if (*member)
+				targets.insert((*member)->getFd());
+		}
+	}
+	for (std::set<int>::const_iterator it = targets.begin();
+		it != targets.end(); ++it)
+	{
+		queueMessage(*it, message);
 	}
 }

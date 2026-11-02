@@ -6,7 +6,7 @@
 /*   By: sbehar <sbehar@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/16 13:40:38 by ml-hote           #+#    #+#             */
-/*   Updated: 2026/09/01 01:24:50 by sbehar           ###   ########.fr       */
+/*   Updated: 2026/11/02 18:31:48 by sbehar           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 #include "utils_00.hpp"
 #include "Channel.hpp"
 #include <map>
+#include <set>
 #include <vector>
 #include <poll.h>
 
@@ -70,6 +71,7 @@ public:
     void     sendToChannel(Channel *channel, const std::string &message, Client *except);
     void     removeClientFromAllChannels(Client *client);
     void     broadcastToChannel(Channel *channel, const std::string &message);
+    void	 broadcastToSharedChannels(Client &client, const std::string &message);
 
     // Output queue
     void    queueMessage(int clientSocket, const std::string& message);
