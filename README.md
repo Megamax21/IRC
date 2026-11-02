@@ -109,23 +109,41 @@ In an IRC client such as Hexchat:
 | `JOIN` | `/join #a,#b,#c` | Joins several channels |
 
 | `JOIN` | `/join #secret mypassword` | Joins a key-protected channel |
+
 | `PRIVMSG` | `/privmsg #general :Hello!` | Sends a message to a channel |
+
 | `PRIVMSG` | `/privmsg alice :Hi!` | Sends a private message to a user |
+
 | `TOPIC` | `/topic #general` | Displays the current topic |
+
 | `TOPIC` | `/topic #general :Welcome!` | Sets the channel topic |
+
 | `KICK` | `/kick #general bob :spam` | Removes a user from a channel |
+
 | `INVITE` | `/invite bob #general` | Invites a user to a channel |
+
 | `MODE` | `/mode #general` | Displays the current channel modes |
+
 | `MODE` | `/mode #general +i` | Makes the channel invite-only |
+
 | `MODE` | `/mode #general -i` | Disables invite-only mode |
+
 | `MODE` | `/mode #general +t` | Restricts topic changes to channel operators |
+
 | `MODE` | `/mode #general -t` | Allows any channel member to change the topic |
+
 | `MODE` | `/mode #general +k secret` | Sets the channel key |
+
 | `MODE` | `/mode #general -k secret` | Removes the channel key |
+
 | `MODE` | `/mode #general +o charlie` | Gives operator status to a user |
+
 | `MODE` | `/mode #general -o charlie` | Removes operator status from a user |
+
 | `MODE` | `/mode #general +l 10` | Limits the channel to 10 members |
+
 | `MODE` | `/mode #general -l` | Removes the member limit |
+
 | `QUIT` | `/quit` | Disconnects from the server |
 
 ## Resources
