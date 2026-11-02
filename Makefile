@@ -16,7 +16,10 @@ SRCS = srcs/main.cpp \
 		srcs/commands/Kick.cpp \
 		srcs/commands/Invite.cpp \
 		srcs/commands/Topic.cpp \
-		srcs/commands/Mode.cpp
+		srcs/commands/Mode.cpp \
+		srcs/commands/Nick.cpp \
+		srcs/commands/Pass.cpp \
+		srcs/commands/User.cpp
 
 HEADERS = headers/Server.hpp \
 		  headers/utils_00.hpp \

@@ -50,9 +50,6 @@ void sendNumeric(Server& server, const Client& client,
         const std::string& middle,
         const std::string& trailing);
 
-bool isValidNickname(const std::string& nickname);
-bool isValidChannelName(const std::string &name);
-
 std::string toUpper(const std::string& value);
 std::vector<std::string> split(const std::string &value, char delimiter);
 

@@ -64,6 +64,21 @@ void    sendJoinNames(Channel &channel, Client &client)
 		+ " " + channel.getName() + " :End of /NAMES list.\r\n");
 }
 
+bool    isValidChannelName(const std::string &name)
+{
+	if (name.empty())
+		return (false);
+	if (name[0] != '#' && name[0] != '&')
+		return (false);
+	if (name.size() > 50)
+		return (false);
+	if (name.find(' ') != std::string::npos)
+		return (false);
+	if (name.find(',') != std::string::npos)
+		return (false);
+	return (true);
+}
+
 void    executeJoin(Server &server, Client &client, const IRCMessage &message)
 {
 	// si pas de paramètres -> erreur 461
