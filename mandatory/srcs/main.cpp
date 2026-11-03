@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sbehar <sbehar@student.42nice.fr>          +#+  +:+       +#+        */
+/*   By: ml-hote <ml-hote@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/16 13:40:45 by ml-hote           #+#    #+#             */
-/*   Updated: 2026/08/26 21:51:47 by sbehar           ###   ########.fr       */
+/*   Updated: 2026/11/03 15:52:30 by ml-hote          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,5 +20,7 @@ int main(int ac, char **av)
 	std::cout << "Parsing is finished" << std::endl;
 	Server *irc_server = new Server(atoi(av[1]), av[2]);
 	irc_server->serverLaunching();
+	delete irc_server;
+	std::cout << "test" << std::endl;
 	return (0);
 }

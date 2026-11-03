@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sbehar <sbehar@student.42nice.fr>          +#+  +:+       +#+        */
+/*   By: ml-hote <ml-hote@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/16 13:40:44 by ml-hote           #+#    #+#             */
-/*   Updated: 2026/11/02 18:28:23 by sbehar           ###   ########.fr       */
+/*   Updated: 2026/11/03 13:58:03 by ml-hote          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,11 @@ Server::Server(int port, std::string password) : _password(password), _socket(0)
 
 Server::~Server()
 {
+	// Clean finish
+	this->_pollFds.clear();
+	this->_clients.clear();
+	// for (int i = 0; i < this->_pollFds.size(); i++)
+	// 	free(this->_pollFds[i]);
 	std::cout << "Server destructor called" << std::endl;
 }
 
