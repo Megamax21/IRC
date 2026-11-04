@@ -6,7 +6,7 @@
 /*   By: ml-hote <ml-hote@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/16 13:40:44 by ml-hote           #+#    #+#             */
-/*   Updated: 2026/11/03 13:58:03 by ml-hote          ###   ########.fr       */
+/*   Updated: 2026/11/04 01:10:30 by ml-hote          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,23 +16,31 @@
 #include "../../headers/Parser.hpp"
 #include "../../headers/Commands.hpp"
 
-Server::Server() : _password("1234"), _socket(0), _port(0)
+Server::Server() : _password("1234"), _socket(-1), _port(0)
 {
 	std::cout << "Server constructor called" << std::endl;
 }
 
-Server::Server(int port, std::string password) : _password(password), _socket(0), _port(port)
+Server::Server(int port, std::string password) : _password(password), _socket(-1), _port(port)
 {
 	std::cout << "Server constructor called with args" << std::endl;
 }
 
 Server::~Server()
 {
-	// Clean finish
-	this->_pollFds.clear();
-	this->_clients.clear();
-	// for (int i = 0; i < this->_pollFds.size(); i++)
-	// 	free(this->_pollFds[i]);
+	for (std::map<int, Client*>::iterator it = _clients.begin();
+		it != _clients.end(); ++it)
+	{
+		delete it->second;
+		close(it->first);
+	}
+
+	_clients.clear();
+
+	if (_socket >= 0)
+		close(_socket);
+
+	_pollFds.clear();
 	std::cout << "Server destructor called" << std::endl;
 }
 

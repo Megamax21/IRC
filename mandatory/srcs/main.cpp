@@ -6,7 +6,7 @@
 /*   By: ml-hote <ml-hote@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/16 13:40:45 by ml-hote           #+#    #+#             */
-/*   Updated: 2026/11/03 15:52:30 by ml-hote          ###   ########.fr       */
+/*   Updated: 2026/11/04 01:13:20 by ml-hote          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,15 @@
 
 int main(int ac, char **av)
 {
+	struct sigaction signalAction;
+
+	// Signal gestion (ctrl + D and + \)
+	memset(&signalAction, 0, sizeof(signalAction));
+	signalAction.sa_handler = handleSignal;
+	sigemptyset(&signalAction.sa_mask);
+	sigaction(SIGINT, &signalAction, NULL);
+	sigaction(SIGTERM, &signalAction, NULL);
+
 	std::cout << "Before parsing" << std::endl;
 	if (!argsParsing(ac, av))
 		return (-1);

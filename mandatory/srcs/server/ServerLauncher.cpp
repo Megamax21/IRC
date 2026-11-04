@@ -15,6 +15,14 @@
 #include "../../headers/Parser.hpp"
 #include "../../headers/Commands.hpp"
 
+volatile sig_atomic_t g_shutdownRequested = 0;
+
+void handleSignal(int signalNumber)
+{
+	(void)signalNumber;
+	g_shutdownRequested = 1;
+}
+
 
 /*	create_socket()
 
@@ -205,14 +213,16 @@ void Server::serverLaunching()
 	serverPoll.revents = 0;
 	this->_pollFds.push_back(serverPoll);
 
-	while (true)
+	while (!g_shutdownRequested)
 	{
 		int ready = poll(&this->_pollFds[0], this->_pollFds.size(), -1);
 
 		if (ready < 0)
 		{
+			if (errno == EINTR && g_shutdownRequested)
+				break;
 			std::cerr << "Error: poll() failed" << std::endl;
-			continue;
+			break;
 		}
 
 		for (std::vector<struct pollfd>::size_type i = 0; i < this->_pollFds.size();)
@@ -283,7 +293,6 @@ void Server::serverLaunching()
 		}
 	}
 
-	close(this->_socket);
 }
 
 void Server::addClient(int clientSocket)
