@@ -23,13 +23,13 @@ int main(int ac, char **av)
 	sigaction(SIGINT, &signalAction, NULL);
 	sigaction(SIGTERM, &signalAction, NULL);
 
-	std::cout << "Before parsing" << std::endl;
+	// std::cout << "Before parsing" << std::endl;
 	if (!argsParsing(ac, av))
 		return (-1);
-	std::cout << "Parsing is finished" << std::endl;
+	// std::cout << "Parsing is finished" << std::endl;
 	Server *irc_server = new Server(atoi(av[1]), av[2]);
 	irc_server->serverLaunching();
 	delete irc_server;
-	std::cout << "test" << std::endl;
+	// std::cout << "test" << std::endl;
 	return (0);
 }
